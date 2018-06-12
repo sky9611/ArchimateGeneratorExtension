@@ -86,6 +86,8 @@ namespace ArchimateGeneratorExtension
     {
         private string output_path_ = "";
 
+        [DisplayName("Output path")]
+        [Description("The path of generated files")]
         public string Output_path_
         {
             get { return output_path_; }
