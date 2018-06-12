@@ -20,6 +20,13 @@
           <ButtonText>Generate BusinessObject classes</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidGenerateCommandPackageCmdSet" id="GenerateCommandId2" priority="0x0101" type="Button">
+        <Parent guid="guidGenerateCommandPackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic2" />
+        <Strings>
+          <ButtonText>Generate 2</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <Bitmaps>
@@ -33,6 +40,7 @@
     <GuidSymbol name="guidGenerateCommandPackageCmdSet" value="{8f7ede4d-9591-48df-8aee-506dc67fdba0}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="GenerateCommandId" value="0x0100" />
+      <IDSymbol name="GenerateCommandId2" value="0x0101" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{1acc741f-e2e2-4f50-8216-3765ac74953b}" >

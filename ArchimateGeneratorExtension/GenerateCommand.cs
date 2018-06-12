@@ -16,6 +16,7 @@ namespace ArchimateGeneratorExtension
         /// Command ID.
         /// </summary>
         public const int CommandId = 0x0100;
+        public const int CommandId2 = 0x0101;
 
         /// <summary>
         /// Command menu group (command set GUID).
@@ -39,8 +40,12 @@ namespace ArchimateGeneratorExtension
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(this.Execute, menuCommandID);
+            var menuItem = new MenuCommand(this.GenerateBO, menuCommandID);
             commandService.AddCommand(menuItem);
+
+            var menuCommandID2 = new CommandID(CommandSet, CommandId2);
+            var menuItem2 = new MenuCommand(this.Generate2, menuCommandID2);
+            commandService.AddCommand(menuItem2);
         }
 
         /// <summary>
@@ -84,7 +89,7 @@ namespace ArchimateGeneratorExtension
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event args.</param>
-        private void Execute(object sender, EventArgs e)
+        private void GenerateBO(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
@@ -109,6 +114,23 @@ namespace ArchimateGeneratorExtension
                 path_out = generateCommandPackage.Output_path_ + "\\BusinessObjectGenerated.cs";
 
             FichierGenerator.Program.GenerateBuisinessObjects(path_in, path_out);
+        }
+
+        private void Generate2(object sender, EventArgs e)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
+            string message = "Button Generate 2 called";
+            string title = "ArchimateGenerateExtension";
+
+            // show a message box to prove we were here
+            VsShellUtilities.ShowMessageBox(
+                this.package,
+                message,
+                title,
+                OLEMSGICON.OLEMSGICON_INFO,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
 
         private static EnvDTE80.DTE2 GetDTE2()
