@@ -17,14 +17,14 @@
         <Parent guid="guidGenerateCommandPackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Generate BusinessObject classes</ButtonText>
+          <ButtonText>Generate tout</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidGenerateCommandPackageCmdSet" id="GenerateCommandId2" priority="0x0101" type="Button">
         <Parent guid="guidGenerateCommandPackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic2" />
         <Strings>
-          <ButtonText>Generate 2</ButtonText>
+          <ButtonText>Generate...</ButtonText>
         </Strings>
       </Button>
     </Buttons>

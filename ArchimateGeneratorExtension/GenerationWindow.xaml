@@ -1,0 +1,24 @@
+﻿<local:BaseDialogWindow x:Class="ArchimateGeneratorExtension.GenerationWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ArchimateGeneratorExtension"
+             mc:Ignorable="d" Height="440.541" Width="556.757">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="40,48,0,0" TextWrapping="Wrap" Text="Element type" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
+        <TextBlock HorizontalAlignment="Left" Margin="40,256,0,0" TextWrapping="Wrap" Text="Element type" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
+        <TextBox HorizontalAlignment="Left" Height="36" Margin="283,257,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="241"/>
+        <Button Content="Generate" HorizontalAlignment="Left" Margin="435,335,0,0" VerticalAlignment="Top" Width="89" Height="32" FontSize="16"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Margin="283,335,0,0" VerticalAlignment="Top" Width="89" Height="32" Click="Button_Click" FontSize="16"/>
+        <ListBox HorizontalAlignment="Left" Height="163" Margin="283,48,0,0" VerticalAlignment="Top" Width="241">
+            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
+        </ListBox>
+    </Grid>
+</local:BaseDialogWindow>

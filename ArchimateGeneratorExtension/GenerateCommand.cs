@@ -120,17 +120,18 @@ namespace ArchimateGeneratorExtension
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
-            string message = "Button Generate 2 called";
-            string title = "ArchimateGenerateExtension";
+            //string message = "Button Generate 2 called";
+            //string title = "ArchimateGenerateExtension";
 
-            // show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.package,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            //// show a message box to prove we were here
+            //VsShellUtilities.ShowMessageBox(
+            //    this.package,
+            //    message,
+            //    title,
+            //    OLEMSGICON.OLEMSGICON_INFO,
+            //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+            //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            ShowGenerationWindow();
         }
 
         private static EnvDTE80.DTE2 GetDTE2()
@@ -155,5 +156,10 @@ namespace ArchimateGeneratorExtension
             return string.Empty;
         }
 
+        private void ShowGenerationWindow()
+        {
+            var generationControl = new GenerationWindow();
+            generationControl.ShowDialog();
+        }
     }
 }
