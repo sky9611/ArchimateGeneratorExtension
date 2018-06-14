@@ -40,7 +40,7 @@ namespace ArchimateGeneratorExtension
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(this.GenerateBO, menuCommandID);
+            var menuItem = new MenuCommand(this.GenerateAll, menuCommandID);
             commandService.AddCommand(menuItem);
 
             var menuCommandID2 = new CommandID(CommandSet, CommandId2);
@@ -89,7 +89,7 @@ namespace ArchimateGeneratorExtension
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event args.</param>
-        private void GenerateBO(object sender, EventArgs e)
+        private void GenerateAll(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
@@ -109,11 +109,11 @@ namespace ArchimateGeneratorExtension
             string path_out;
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
-                path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "BusinessObjectGenerated.cs";
+                path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
             else
-                path_out = generateCommandPackage.Output_path_ + "\\BusinessObjectGenerated.cs";
+                path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
 
-            FichierGenerator.Program.GenerateBuisinessObjects(path_in, path_out);
+            FichierGenerator.Program.Generate(path_in, path_out);
         }
 
         private void Generate2(object sender, EventArgs e)
@@ -158,7 +158,8 @@ namespace ArchimateGeneratorExtension
 
         private void ShowGenerationWindow()
         {
-            var generationControl = new GenerationWindow();
+            GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
+            var generationControl = new GenerationWindow(GetSourceFilePath(), generateCommandPackage.Output_path_);
             generationControl.ShowDialog();
         }
     }

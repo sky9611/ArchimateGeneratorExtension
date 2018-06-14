@@ -4,21 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ArchimateGeneratorExtension"
-             mc:Ignorable="d" Height="440.541" Width="556.757">
+             mc:Ignorable="d" Height="440.541" Width="585.135">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="40,48,0,0" TextWrapping="Wrap" Text="Element type" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Left" Margin="40,256,0,0" TextWrapping="Wrap" Text="Element type" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
-        <TextBox HorizontalAlignment="Left" Height="36" Margin="283,257,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="241"/>
-        <Button Content="Generate" HorizontalAlignment="Left" Margin="435,335,0,0" VerticalAlignment="Top" Width="89" Height="32" FontSize="16"/>
-        <Button Content="Cancel" HorizontalAlignment="Left" Margin="283,335,0,0" VerticalAlignment="Top" Width="89" Height="32" Click="Button_Click" FontSize="16"/>
-        <ListBox HorizontalAlignment="Left" Height="163" Margin="283,48,0,0" VerticalAlignment="Top" Width="241">
+        <TextBlock x:Name="Element_type" HorizontalAlignment="Left" Margin="40,48,0,0" TextWrapping="Wrap" Text="Element type" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
+        <TextBlock HorizontalAlignment="Left" Margin="40,256,0,0" TextWrapping="Wrap" Text="Domain" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
+        <TextBox x:Name="Domain" HorizontalAlignment="Left" Height="36" Margin="283,257,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="257" TextChanged="Domain_TextChanged" FontSize="18"/>
+        <Button x:Name="Generate" Content="Generate" HorizontalAlignment="Left" Margin="451,335,0,0" VerticalAlignment="Top" Width="89" Height="32" FontSize="16" Click="Generate_Click"/>
+        <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Left" Margin="305,335,0,0" VerticalAlignment="Top" Width="89" Height="32" Click="Button_Click" FontSize="16"/>
+        <ListBox HorizontalAlignment="Left" Height="186" Margin="283,48,0,0" VerticalAlignment="Top" Width="257" SelectionChanged="ListBox_SelectionChanged">
             <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
-            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
-            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
-            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
-            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
-            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
-            <CheckBox Content="Business Object" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Application Interface" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Application Service" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Application Function" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Application Component" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Application Event" Checked="CheckBox_Checked" FontSize="18"/>
+            <CheckBox Content="Application Process" Checked="CheckBox_Checked" FontSize="18"/>
         </ListBox>
     </Grid>
 </local:BaseDialogWindow>
