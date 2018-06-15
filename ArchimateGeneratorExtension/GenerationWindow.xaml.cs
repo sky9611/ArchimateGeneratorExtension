@@ -1,17 +1,8 @@
-﻿using System;
+﻿using FichierGenerator;
+using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ArchimateGeneratorExtension
 {
@@ -22,11 +13,18 @@ namespace ArchimateGeneratorExtension
     {
         string input_path;
         string output_path;
-        public GenerationWindow(string path_in, string path_out)
+        FileGenerator fileGenerator;
+        
+        public GenerationWindow(string path_in, AsyncPackage package)
         {
+            GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             input_path = path_in;
-            output_path = path_out;
+            output_path = generateCommandPackage.Output_path_;
+            fileGenerator = new FileGenerator(path_in);
             InitializeComponent();
+            ElementType.ItemsSource = fileGenerator.getAllType();
+            Group.ItemsSource = fileGenerator.getAllGroup();
+            View.ItemsSource = fileGenerator.getAllView();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -57,7 +55,28 @@ namespace ArchimateGeneratorExtension
             else
                 path_out = output_path + "\\FileGenerated.cs";
 
-            FichierGenerator.Program.Generate(input_path, path_out);
+            List<string> list_type = new List<string>();
+            foreach(var i in ElementType.SelectedItems)
+            {
+                list_type.Add(i.ToString());
+            }
+            string[] types = list_type.ToArray();
+
+            List<string> list_group = new List<string>();
+            foreach (var i in Group.SelectedItems)
+            {
+                list_type.Add(i.ToString());
+            }
+            string[] groups = list_group.ToArray();
+
+            List<string> list_view = new List<string>();
+            foreach (var i in View.SelectedItems)
+            {
+                list_type.Add(i.ToString());
+            }
+            string[] views = list_view.ToArray();
+
+            fileGenerator.Generate(path_out, types, groups, views);
         }
     }
 }

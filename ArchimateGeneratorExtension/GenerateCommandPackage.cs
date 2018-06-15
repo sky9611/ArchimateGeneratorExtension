@@ -62,6 +62,30 @@ namespace ArchimateGeneratorExtension
             }
         }
 
+        public string[] Element_type_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.Element_type_;
+            }
+        }
+        public string[] Groups_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.Groups_;
+            }
+        }
+        public string[] Views_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.Views_;
+            }
+        }
         #region Package Members
 
         /// <summary>
@@ -85,6 +109,9 @@ namespace ArchimateGeneratorExtension
     public class OptionPageGrid : DialogPage
     {
         private string output_path_ = "";
+        private string[] element_type_;
+        private string[] groups_;
+        private string[] views_;
 
         [DisplayName("Output path")]
         [Description("The path of generated files")]
@@ -93,6 +120,19 @@ namespace ArchimateGeneratorExtension
             get { return output_path_; }
             set { output_path_ = value; }
         }
+
+        [DisplayName("Element types")]
+        [Description("The selected types of element")]
+        public string[] Element_type_ { get => element_type_; set => element_type_ = value; }
+
+        [DisplayName("Groups")]
+        [Description("The selected groups")]
+        public string[] Groups_ { get => groups_; set => groups_ = value; }
+
+        [DisplayName("Views")]
+        [Description("The selected views")]
+        public string[] Views_ { get => views_; set => views_ = value; }
+        
     }
 
     //[Guid("00000000-0000-0000-0000-000000000000")]

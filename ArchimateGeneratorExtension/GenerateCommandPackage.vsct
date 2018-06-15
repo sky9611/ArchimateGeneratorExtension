@@ -27,6 +27,13 @@
           <ButtonText>Generate...</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidGenerateCommandPackageCmdSet" id="GenerateCommandId3" priority="0x0102" type="Button">
+        <Parent guid="guidGenerateCommandPackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic2" />
+        <Strings>
+          <ButtonText>Regenerate</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <Bitmaps>
@@ -41,6 +48,7 @@
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="GenerateCommandId" value="0x0100" />
       <IDSymbol name="GenerateCommandId2" value="0x0101" />
+      <IDSymbol name="GenerateCommandId3" value="0x0102" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{1acc741f-e2e2-4f50-8216-3765ac74953b}" >
