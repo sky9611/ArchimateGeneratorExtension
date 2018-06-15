@@ -95,4 +95,5 @@ D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGenerato
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension_MarkupCompile.lref
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\GenerationWindow.baml
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.g.resources
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\ArchimateGeneratorExtension.dll.config
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.csprojAssemblyReference.cache

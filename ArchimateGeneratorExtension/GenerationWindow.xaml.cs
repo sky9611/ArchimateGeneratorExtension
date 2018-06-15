@@ -1,4 +1,5 @@
-﻿using FichierGenerator;
+﻿using EnvDTE;
+using FichierGenerator;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,13 @@ namespace ArchimateGeneratorExtension
         string input_path;
         string output_path;
         FileGenerator fileGenerator;
-        GenerateCommandPackage generateCommandPackage;
 
-        public GenerationWindow(string path_in, ref GenerateCommandPackage generateCommandPackage)
+        public GenerationWindow(string path_in)
         {
             input_path = path_in;
-            output_path = generateCommandPackage.Output_path_;
+            //output_path = generateCommandPackage.Output_path_;
             fileGenerator = new FileGenerator(path_in);
-            this.generateCommandPackage = generateCommandPackage;
+            //this.generateCommandPackage = generateCommandPackage;
             InitializeComponent();
             ElementType.ItemsSource = fileGenerator.getAllType();
             Group.ItemsSource = fileGenerator.getAllGroup();
@@ -53,7 +53,7 @@ namespace ArchimateGeneratorExtension
         private void Generate_Click(object sender, RoutedEventArgs e)
         {
             string path_out;
-            if (output_path.Equals("") || output_path == null)
+            if (output_path == null || output_path.Equals(""))
                 path_out = input_path.Replace(input_path.Substring(input_path.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
             else
                 path_out = output_path + "\\FileGenerated.cs";
@@ -69,7 +69,7 @@ namespace ArchimateGeneratorExtension
             List<string> list_group = new List<string>();
             foreach (var i in Group.SelectedItems)
             {
-                list_type.Add(i.ToString());
+                list_group.Add(i.ToString());
             }
             string[] groups = list_group.ToArray();
             string str_groups = String.Join(",", groups.Select(i => i.ToString()).ToArray());
@@ -77,14 +77,15 @@ namespace ArchimateGeneratorExtension
             List<string> list_view = new List<string>();
             foreach (var i in View.SelectedItems)
             {
-                list_type.Add(i.ToString());
+                list_view.Add(i.ToString());
             }
             string[] views = list_view.ToArray();
             string str_views = String.Join(",", views.Select(i => i.ToString()).ToArray());
 
-            //generateCommandPackage.Element_type_ = str_types;
-            //generateCommandPackage.Groups_ = str_groups;
-            //generateCommandPackage.Views_ = str_views;
+            UserSettings.Default.ElementType = str_types;
+            UserSettings.Default.Groups = str_groups;
+            UserSettings.Default.Views = str_views;
+            UserSettings.Default.Save();
             fileGenerator.Generate(path_out, types, groups, views);
         }
     }
