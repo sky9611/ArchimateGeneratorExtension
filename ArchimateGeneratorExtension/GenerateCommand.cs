@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 using EnvDTE;
 using FichierGenerator;
+using System.Linq;
 
 namespace ArchimateGeneratorExtension
 {
@@ -167,7 +168,11 @@ namespace ArchimateGeneratorExtension
                 path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
             else
                 path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
-            fileGenerator.Generate(path_out, generateCommandPackage.Element_type_, generateCommandPackage.Groups_, generateCommandPackage.Views_);
+
+            //string[] element_types = generateCommandPackage.Element_type_.Split(',').ToList().ToArray();
+            //string[] groups = generateCommandPackage.Groups_.Split(',').ToList().ToArray();
+            //string[] views = generateCommandPackage.Views_.Split(',').ToList().ToArray();
+            //fileGenerator.Generate(path_out, element_types, groups, views);
         }
 
 
@@ -196,7 +201,7 @@ namespace ArchimateGeneratorExtension
         private void ShowGenerationWindow()
         {
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
-            var generationControl = new GenerationWindow(GetSourceFilePath(), generateCommandPackage);
+            var generationControl = new GenerationWindow(GetSourceFilePath(), ref generateCommandPackage);
             generationControl.ShowDialog();
         }
     }

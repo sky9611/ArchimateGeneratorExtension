@@ -1,6 +1,8 @@
 ﻿using FichierGenerator;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,13 +16,14 @@ namespace ArchimateGeneratorExtension
         string input_path;
         string output_path;
         FileGenerator fileGenerator;
-        
-        public GenerationWindow(string path_in, AsyncPackage package)
+        GenerateCommandPackage generateCommandPackage;
+
+        public GenerationWindow(string path_in, ref GenerateCommandPackage generateCommandPackage)
         {
-            GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             input_path = path_in;
             output_path = generateCommandPackage.Output_path_;
             fileGenerator = new FileGenerator(path_in);
+            this.generateCommandPackage = generateCommandPackage;
             InitializeComponent();
             ElementType.ItemsSource = fileGenerator.getAllType();
             Group.ItemsSource = fileGenerator.getAllGroup();
@@ -61,6 +64,7 @@ namespace ArchimateGeneratorExtension
                 list_type.Add(i.ToString());
             }
             string[] types = list_type.ToArray();
+            string str_types = String.Join(",", types.Select(i => i.ToString()).ToArray());
 
             List<string> list_group = new List<string>();
             foreach (var i in Group.SelectedItems)
@@ -68,6 +72,7 @@ namespace ArchimateGeneratorExtension
                 list_type.Add(i.ToString());
             }
             string[] groups = list_group.ToArray();
+            string str_groups = String.Join(",", groups.Select(i => i.ToString()).ToArray());
 
             List<string> list_view = new List<string>();
             foreach (var i in View.SelectedItems)
@@ -75,7 +80,11 @@ namespace ArchimateGeneratorExtension
                 list_type.Add(i.ToString());
             }
             string[] views = list_view.ToArray();
+            string str_views = String.Join(",", views.Select(i => i.ToString()).ToArray());
 
+            //generateCommandPackage.Element_type_ = str_types;
+            //generateCommandPackage.Groups_ = str_groups;
+            //generateCommandPackage.Views_ = str_views;
             fileGenerator.Generate(path_out, types, groups, views);
         }
     }
