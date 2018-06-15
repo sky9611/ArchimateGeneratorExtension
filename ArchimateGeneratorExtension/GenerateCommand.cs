@@ -14,6 +14,7 @@ namespace ArchimateGeneratorExtension
     /// </summary>
     internal sealed class GenerateCommand
     {
+        private static readonly string[] all_file_types = { "xml" };
         /// <summary>
         /// Command ID.
         /// </summary>
@@ -100,9 +101,14 @@ namespace ArchimateGeneratorExtension
         /// <param name="e">Event args.</param>
         private void GenerateAll(object sender, EventArgs e)
         {
+            string path_in = GetSourceFilePath();
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
-            string message = "File generated";
+            string message;
+            if (isCorrectFileType(path_in))
+                message = "File generated";
+            else
+                message = "error: File type not correct";
             string title = "ArchimateGenerateExtension";
 
             // show a message box to prove we were here
@@ -114,7 +120,7 @@ namespace ArchimateGeneratorExtension
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
 
-            string path_in = GetSourceFilePath();
+            
             string path_out;
             FileGenerator fileGenerator = new FileGenerator(path_in);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
@@ -129,26 +135,41 @@ namespace ArchimateGeneratorExtension
         private void Generate2(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            string path_in = GetSourceFilePath();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
-            //string message = "Button Generate 2 called";
-            //string title = "ArchimateGenerateExtension";
+            string message;
+            if (isCorrectFileType(path_in))
+            {
+                ShowGenerationWindow();
+            }
+            else
+            {
+                message = "error: File type not correct";
+                string title = "ArchimateGenerateExtension";
 
-            //// show a message box to prove we were here
-            //VsShellUtilities.ShowMessageBox(
-            //    this.package,
-            //    message,
-            //    title,
-            //    OLEMSGICON.OLEMSGICON_INFO,
-            //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
-            //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-            ShowGenerationWindow();
+                // show a message box to prove we were here
+                VsShellUtilities.ShowMessageBox(
+                    this.package,
+                    message,
+                    title,
+                    OLEMSGICON.OLEMSGICON_INFO,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                
+            }
+                
         }
 
         private void Generate3(object sender, EventArgs e)
         {
+            string path_in = GetSourceFilePath();
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
-            string message = "File generated with the former setting";
+            string message;
+            if (isCorrectFileType(path_in))
+                message = "error: File generated with the former setting";
+            else
+                message = "File type not correct";
             string title = "ArchimateGenerateExtension";
 
             // show a message box to prove we were here
@@ -160,7 +181,6 @@ namespace ArchimateGeneratorExtension
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
 
-            string path_in = GetSourceFilePath();
             string path_out;
             FileGenerator fileGenerator = new FileGenerator(path_in);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
@@ -207,6 +227,12 @@ namespace ArchimateGeneratorExtension
             
             var generationControl = new GenerationWindow(GetSourceFilePath());
             generationControl.ShowDialog();
+        }
+
+        private bool isCorrectFileType(string file_name)
+        {
+            string file_type = file_name.Substring(file_name.LastIndexOf('.')+1);
+            return all_file_types.Contains(file_type);
         }
     }
 }
