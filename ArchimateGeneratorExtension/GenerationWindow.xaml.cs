@@ -59,7 +59,7 @@ namespace ArchimateGeneratorExtension
                 path_out = output_path + "\\FileGenerated.cs";
 
             List<string> list_type = new List<string>();
-            foreach(var i in ElementType.SelectedItems)
+            foreach (var i in ElementType.SelectedItems)
             {
                 list_type.Add(i.ToString());
             }

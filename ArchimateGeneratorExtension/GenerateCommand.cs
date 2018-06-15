@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 using EnvDTE;
 using FichierGenerator;
-using System.Linq;
 
 namespace ArchimateGeneratorExtension
 {
@@ -19,9 +18,6 @@ namespace ArchimateGeneratorExtension
         /// </summary>
         public const int CommandId = 0x0100;
         public const int CommandId2 = 0x0101;
-        public const int CommandId3 = 0x0102;
-
-        FileGenerator fileGenerator;
 
         /// <summary>
         /// Command menu group (command set GUID).
@@ -50,10 +46,6 @@ namespace ArchimateGeneratorExtension
 
             var menuCommandID2 = new CommandID(CommandSet, CommandId2);
             var menuItem2 = new MenuCommand(this.Generate2, menuCommandID2);
-            commandService.AddCommand(menuItem2);
-
-            var menuCommandID3 = new CommandID(CommandSet, CommandId3);
-            var menuItem3 = new MenuCommand(this.Generate3, menuCommandID3);
             commandService.AddCommand(menuItem2);
         }
 
@@ -116,13 +108,13 @@ namespace ArchimateGeneratorExtension
 
             string path_in = GetSourceFilePath();
             string path_out;
-            fileGenerator = new FileGenerator(path_in);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
                 path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
             else
                 path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
 
+            FileGenerator fileGenerator = new FileGenerator(path_in);
             fileGenerator.Generate(path_out);
         }
 
@@ -143,38 +135,6 @@ namespace ArchimateGeneratorExtension
             //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
             ShowGenerationWindow();
         }
-
-        private void Generate3(object sender, EventArgs e)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
-            string message = "File generated with the former setting";
-            string title = "ArchimateGenerateExtension";
-
-            // show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.package,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-            string path_in = GetSourceFilePath();
-            string path_out;
-            fileGenerator = new FileGenerator(path_in);
-            GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
-            if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
-                path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
-            else
-                path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
-
-            //string[] element_types = generateCommandPackage.Element_type_.Split(',').ToList().ToArray();
-            //string[] groups = generateCommandPackage.Groups_.Split(',').ToList().ToArray();
-            //string[] views = generateCommandPackage.Views_.Split(',').ToList().ToArray();
-            //fileGenerator.Generate(path_out, element_types, groups, views);
-        }
-
 
         private static EnvDTE80.DTE2 GetDTE2()
         {
