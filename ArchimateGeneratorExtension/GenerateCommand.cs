@@ -199,7 +199,17 @@ namespace ArchimateGeneratorExtension
             string[] groups = str_groups.Length>0 ? str_groups.Split(',').ToList().ToArray() : null;
             string[] views = str_views.Length>0 ? str_views.Split(',').ToList().ToArray() : null;
             string[] projects_paths = str_projects_paths.Length > 0 ? str_projects_paths.Split(',').ToList().ToArray() : null;
-            if(str_projects_paths.Length==0)
+
+            var projects = GetProjects();
+            Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
+            foreach(var p in projects)
+            {
+                var fullName = p.FullName;
+                var project_path = fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), "");
+                dict_path_project.Add(project_path, p);
+            }
+
+            if (str_projects_paths.Length==0)
             {
                 fileGenerator.Generate(path_out, element_types, groups, views);
             }
@@ -208,6 +218,7 @@ namespace ArchimateGeneratorExtension
                 foreach(var path in projects_paths)
                 {
                     fileGenerator.Generate(path + "\\FileGenerated.cs", element_types, groups, views);
+                    dict_path_project[path].ProjectItems.AddFromFile(path + "\\FileGenerated.cs");
                 }
             }
         }

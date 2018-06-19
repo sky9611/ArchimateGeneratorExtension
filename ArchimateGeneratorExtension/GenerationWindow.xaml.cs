@@ -92,10 +92,13 @@ namespace ArchimateGeneratorExtension
             string str_views = String.Join(",", views.Select(i => i.ToString()).ToArray());
 
             List<string> list_project = new List<string>();
+            Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
             foreach (var i in Project.SelectedItems)
             {
                 var fullName = dict_name_project[i.ToString()].FullName;
-                list_project.Add(fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), ""));
+                var project_path = fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), "");
+                list_project.Add(project_path);
+                dict_path_project.Add(project_path, dict_name_project[i.ToString()]);
             }
             string[] selectedProjects = list_project.ToArray();
             string str_selectedProjects = String.Join(",", selectedProjects.Select(i => i.ToString()).ToArray());
@@ -108,7 +111,11 @@ namespace ArchimateGeneratorExtension
 
             if (selectedProjects.Count()>0)
                 foreach(var path in selectedProjects)
-                    fileGenerator.Generate(path + "\\FileGenerated.cs", types, groups, views);
+                {
+                    fileGenerator.Generate(path + "FileGenerated.cs", types, groups, views);
+                    dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
+                    //dict_path_project[path].
+                }
             else
                 fileGenerator.Generate(output_path, types, groups, views);
         }
