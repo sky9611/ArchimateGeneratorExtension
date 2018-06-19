@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 using EnvDTE;
 using FichierGenerator;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ArchimateGeneratorExtension
 {
@@ -13,11 +15,15 @@ namespace ArchimateGeneratorExtension
     /// </summary>
     internal sealed class GenerateCommand
     {
+        private static readonly string[] all_file_types = { "xml" };
         /// <summary>
         /// Command ID.
         /// </summary>
         public const int CommandId = 0x0100;
         public const int CommandId2 = 0x0101;
+        public const int CommandId3 = 0x0102;
+
+        //FileGenerator fileGenerator;
 
         /// <summary>
         /// Command menu group (command set GUID).
@@ -47,6 +53,10 @@ namespace ArchimateGeneratorExtension
             var menuCommandID2 = new CommandID(CommandSet, CommandId2);
             var menuItem2 = new MenuCommand(this.Generate2, menuCommandID2);
             commandService.AddCommand(menuItem2);
+
+            var menuCommandID3 = new CommandID(CommandSet, CommandId3);
+            var menuItem3 = new MenuCommand(this.Generate3, menuCommandID3);
+            commandService.AddCommand(menuItem3);
         }
 
         /// <summary>
@@ -92,9 +102,14 @@ namespace ArchimateGeneratorExtension
         /// <param name="e">Event args.</param>
         private void GenerateAll(object sender, EventArgs e)
         {
+            string path_in = GetSourceFilePath();
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
-            string message = "File generated";
+            string message;
+            if (isCorrectFileType(path_in))
+                message = "File generated";
+            else
+                message = "error: File type not correct";
             string title = "ArchimateGenerateExtension";
 
             // show a message box to prove we were here
@@ -106,35 +121,108 @@ namespace ArchimateGeneratorExtension
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
 
-            string path_in = GetSourceFilePath();
+            
             string path_out;
+            FileGenerator fileGenerator = new FileGenerator(path_in);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
                 path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
             else
                 path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
 
-            FileGenerator fileGenerator = new FileGenerator(path_in);
-            fileGenerator.Generate(path_out);
+            fileGenerator.Generate(path_out,null,null,null);
         }
 
         private void Generate2(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            string path_in = GetSourceFilePath();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
-            //string message = "Button Generate 2 called";
-            //string title = "ArchimateGenerateExtension";
+            string message;
+            if (isCorrectFileType(path_in))
+            {
+                ShowGenerationWindow();
+            }
+            else
+            {
+                message = "error: File type not correct";
+                string title = "ArchimateGenerateExtension";
 
-            //// show a message box to prove we were here
-            //VsShellUtilities.ShowMessageBox(
-            //    this.package,
-            //    message,
-            //    title,
-            //    OLEMSGICON.OLEMSGICON_INFO,
-            //    OLEMSGBUTTON.OLEMSGBUTTON_OK,
-            //    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-            ShowGenerationWindow();
+                // show a message box to prove we were here
+                VsShellUtilities.ShowMessageBox(
+                    this.package,
+                    message,
+                    title,
+                    OLEMSGICON.OLEMSGICON_INFO,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                
+            }
+                
         }
+
+        private void Generate3(object sender, EventArgs e)
+        {
+            string path_in = GetSourceFilePath();
+            ThreadHelper.ThrowIfNotOnUIThread();
+            //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
+            string message;
+            if (isCorrectFileType(path_in))
+                message = "error: File generated with the former setting";
+            else
+                message = "File type not correct";
+            string title = "ArchimateGenerateExtension";
+
+            // show a message box to prove we were here
+            VsShellUtilities.ShowMessageBox(
+                this.package,
+                message,
+                title,
+                OLEMSGICON.OLEMSGICON_INFO,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+
+            string path_out;
+            FileGenerator fileGenerator = new FileGenerator(path_in);
+            GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
+            if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
+                path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
+            else
+                path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
+
+            string str_types = UserSettings.Default.ElementType;
+            string str_groups = UserSettings.Default.Groups;
+            string str_views = UserSettings.Default.Views;
+            string str_projects_paths = UserSettings.Default.Projects_paths;
+
+            string[] element_types = str_types.Length>0 ? str_types.Split(',').ToList().ToArray() : null;
+            string[] groups = str_groups.Length>0 ? str_groups.Split(',').ToList().ToArray() : null;
+            string[] views = str_views.Length>0 ? str_views.Split(',').ToList().ToArray() : null;
+            string[] projects_paths = str_projects_paths.Length > 0 ? str_projects_paths.Split(',').ToList().ToArray() : null;
+
+            var projects = GetProjects();
+            Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
+            foreach(var p in projects)
+            {
+                var fullName = p.FullName;
+                var project_path = fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), "");
+                dict_path_project.Add(project_path, p);
+            }
+
+            if (str_projects_paths.Length==0)
+            {
+                fileGenerator.Generate(path_out, element_types, groups, views);
+            }
+            else
+            {
+                foreach(var path in projects_paths)
+                {
+                    fileGenerator.Generate(path + "\\FileGenerated.cs", element_types, groups, views);
+                    dict_path_project[path].ProjectItems.AddFromFile(path + "\\FileGenerated.cs");
+                }
+            }
+        }
+
 
         private static EnvDTE80.DTE2 GetDTE2()
         {
@@ -161,8 +249,20 @@ namespace ArchimateGeneratorExtension
         private void ShowGenerationWindow()
         {
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
-            var generationControl = new GenerationWindow(GetSourceFilePath(), ref generateCommandPackage);
+            var generationControl = new GenerationWindow(GetSourceFilePath(), generateCommandPackage.Output_path_ + "\\FileGenerated.cs", GetProjects());
             generationControl.ShowDialog();
+        }
+
+        private bool isCorrectFileType(string file_name)
+        {
+            string file_type = file_name.Substring(file_name.LastIndexOf('.')+1);
+            return all_file_types.Contains(file_type);
+        }
+
+        private IEnumerable<Project> GetProjects()
+        {
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            return _applicationObject.Solution.Projects.Cast<Project>();
         }
     }
 }
