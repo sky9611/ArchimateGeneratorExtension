@@ -5,24 +5,35 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ArchimateGeneratorExtension"
                         xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
-                        mc:Ignorable="d" Height="440.541" Width="757.68">
+                        mc:Ignorable="d" Height="380.541" Width="622.68">
     <Grid Margin="0,0,2,7">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="Element_type" HorizontalAlignment="Left" Margin="40,48,0,0" TextWrapping="Wrap" Text="Element type" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
-        <TextBlock HorizontalAlignment="Left" Margin="40,133,0,0" TextWrapping="Wrap" Text="Group" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
+        <TextBlock x:Name="Element_type" HorizontalAlignment="Left" Margin="40,48,0,0" TextWrapping="Wrap" Text="Element type" VerticalAlignment="Top" Height="45" Width="155" FontSize="18"/>
+        <TextBlock HorizontalAlignment="Left" Margin="40,114,0,0" TextWrapping="Wrap" Text="Group" VerticalAlignment="Top" Height="45
+                   " Width="155" FontSize="18"/>
         <wpfx:CheckComboBox x:Name="Group" 
                             ItemsSource="{Binding}"
-                            SelectedValue="{Binding SelectedValue}" Height="36" Margin="283,134,38,0" VerticalAlignment="Top"/>
-        <Button x:Name="Generate" Content="Generate" HorizontalAlignment="Left" Margin="604,306,0,0" VerticalAlignment="Top" Width="106" Height="34" FontSize="16" Click="Generate_Click"/>
-        <TextBlock HorizontalAlignment="Left" Margin="40,215,0,0" TextWrapping="Wrap" Text="View" VerticalAlignment="Top" Height="37" Width="155" FontSize="24"/>
+                            SelectedValue="{Binding SelectedValue}" Height="45
+                            " Margin="248,114,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322"/>
+        <Button x:Name="Generate" Content="Generate" Margin="481,310,0,0" FontSize="16" Click="Generate_Click" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="89"/>
+        <TextBlock HorizontalAlignment="Left" Margin="40,179,0,0" TextWrapping="Wrap" Text="View" VerticalAlignment="Top" Height="45
+                   " Width="155" FontSize="18"/>
         <wpfx:CheckComboBox x:Name="View" 
-                            SelectedMemberPath="IsSelected"
                             ItemsSource="{Binding}"
-                            SelectedValue="{Binding SelectedValue}" Height="36" Margin="283,215,38,0" VerticalAlignment="Top"/>
+                            SelectedValue="{Binding SelectedValue}" Height="45
+                            " Margin="248,179,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322">
+        </wpfx:CheckComboBox>
         <wpfx:CheckComboBox x:Name="ElementType" ItemsSource="{Binding}"
-                            SelectedValue="{Binding SelectedValue}" Margin="283,48,38,0" VerticalAlignment="Top" Height="37"/>
+                            SelectedValue="{Binding SelectedValue}" Margin="248,48,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="322"/>
+        <TextBlock HorizontalAlignment="Left" Margin="40,243,0,0" TextWrapping="Wrap" Text="Generate to projects" VerticalAlignment="Top" Height="45
+                   " Width="155" FontSize="16"/>
+        <wpfx:CheckComboBox x:Name="Project" 
+                            ItemsSource="{Binding}"
+                            SelectedValue="{Binding SelectedValue}" Height="45
+                            " Margin="248,243,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322">
+        </wpfx:CheckComboBox>
     </Grid>
 </local:BaseDialogWindow>

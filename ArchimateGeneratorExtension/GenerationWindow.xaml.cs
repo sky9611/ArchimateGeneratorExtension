@@ -17,17 +17,26 @@ namespace ArchimateGeneratorExtension
         string input_path;
         string output_path;
         FileGenerator fileGenerator;
+        IEnumerable<Project> projects;
+        Dictionary<string, Project> dict_name_project = new Dictionary<string, Project>();
 
-        public GenerationWindow(string path_in)
+        public GenerationWindow(string path_in, string path_out, IEnumerable<Project> projects)
         {
             input_path = path_in;
-            //output_path = generateCommandPackage.Output_path_;
+            output_path = path_out;
             fileGenerator = new FileGenerator(path_in);
-            //this.generateCommandPackage = generateCommandPackage;
+            this.projects = projects;
             InitializeComponent();
             ElementType.ItemsSource = fileGenerator.getAllType();
             Group.ItemsSource = fileGenerator.getAllGroup();
             View.ItemsSource = fileGenerator.getAllView();
+            List<string> list_project_name = new List<string>(); 
+            foreach(var p in projects)
+            {
+                list_project_name.Add(p.Name);
+                dict_name_project.Add(p.Name, p);
+            }
+            Project.ItemsSource = list_project_name;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -82,11 +91,26 @@ namespace ArchimateGeneratorExtension
             string[] views = list_view.ToArray();
             string str_views = String.Join(",", views.Select(i => i.ToString()).ToArray());
 
+            List<string> list_project = new List<string>();
+            foreach (var i in Project.SelectedItems)
+            {
+                var fullName = dict_name_project[i.ToString()].FullName;
+                list_project.Add(fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), ""));
+            }
+            string[] selectedProjects = list_project.ToArray();
+            string str_selectedProjects = String.Join(",", selectedProjects.Select(i => i.ToString()).ToArray());
+
             UserSettings.Default.ElementType = str_types;
             UserSettings.Default.Groups = str_groups;
             UserSettings.Default.Views = str_views;
+            UserSettings.Default.Projects_paths = str_selectedProjects;
             UserSettings.Default.Save();
-            fileGenerator.Generate(path_out, types, groups, views);
+
+            if (selectedProjects.Count()>0)
+                foreach(var path in selectedProjects)
+                    fileGenerator.Generate(path + "\\FileGenerated.cs", types, groups, views);
+            else
+                fileGenerator.Generate(output_path, types, groups, views);
         }
     }
 }

@@ -58,5 +58,17 @@ namespace ArchimateGeneratorExtension {
                 this["Views"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Projects_paths {
+            get {
+                return ((string)(this["Projects_paths"]));
+            }
+            set {
+                this["Projects_paths"] = value;
+            }
+        }
     }
 }

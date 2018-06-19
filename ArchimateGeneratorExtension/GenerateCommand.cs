@@ -6,6 +6,7 @@ using Task = System.Threading.Tasks.Task;
 using EnvDTE;
 using FichierGenerator;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ArchimateGeneratorExtension
 {
@@ -192,11 +193,23 @@ namespace ArchimateGeneratorExtension
             string str_types = UserSettings.Default.ElementType;
             string str_groups = UserSettings.Default.Groups;
             string str_views = UserSettings.Default.Views;
+            string str_projects_paths = UserSettings.Default.Projects_paths;
 
-            string[] element_types = str_types.Length>0 ? str_types.Split(',').ToList().ToArray():null;
-            string[] groups = str_groups.Length>0 ? str_groups.Split(',').ToList().ToArray():null;
-            string[] views = str_views.Length>0 ? str_views.Split(',').ToList().ToArray():null;
-            fileGenerator.Generate(path_out, element_types, groups, views);
+            string[] element_types = str_types.Length>0 ? str_types.Split(',').ToList().ToArray() : null;
+            string[] groups = str_groups.Length>0 ? str_groups.Split(',').ToList().ToArray() : null;
+            string[] views = str_views.Length>0 ? str_views.Split(',').ToList().ToArray() : null;
+            string[] projects_paths = str_projects_paths.Length > 0 ? str_projects_paths.Split(',').ToList().ToArray() : null;
+            if(str_projects_paths.Length==0)
+            {
+                fileGenerator.Generate(path_out, element_types, groups, views);
+            }
+            else
+            {
+                foreach(var path in projects_paths)
+                {
+                    fileGenerator.Generate(path + "\\FileGenerated.cs", element_types, groups, views);
+                }
+            }
         }
 
 
@@ -224,8 +237,8 @@ namespace ArchimateGeneratorExtension
 
         private void ShowGenerationWindow()
         {
-            
-            var generationControl = new GenerationWindow(GetSourceFilePath());
+            GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
+            var generationControl = new GenerationWindow(GetSourceFilePath(), generateCommandPackage.Output_path_ + "\\FileGenerated.cs", GetProjects());
             generationControl.ShowDialog();
         }
 
@@ -233,6 +246,12 @@ namespace ArchimateGeneratorExtension
         {
             string file_type = file_name.Substring(file_name.LastIndexOf('.')+1);
             return all_file_types.Contains(file_type);
+        }
+
+        private IEnumerable<Project> GetProjects()
+        {
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            return _applicationObject.Solution.Projects.Cast<Project>();
         }
     }
 }
