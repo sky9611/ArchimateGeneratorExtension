@@ -120,44 +120,6 @@ namespace ArchimateGeneratorExtension
                 fileGenerator.Generate(output_path, types, groups, views);
         }
 
-        private void GroupSearch_Keyup(object sender, TextChangedEventArgs e)
-        {
-            if(GroupSearch.Text.Length>0)
-            {
-                List<string> mylist = new List<string>();
-                List<string> groups = new List<string>(fileGenerator.getAllGroup());
-                mylist = groups.FindAll(delegate (string s) { return s.ToLower().Contains(GroupSearch.Text.Trim().ToLower()); });
-                Group.ItemsSource = mylist.ToArray();
-                Group.IsDropDownOpen = true;
-            }
-            else
-            {
-                Group.ItemsSource = fileGenerator.getAllGroup();
-            }
-
-        }
-
-        private void ViewSearch_Keyup(object sender, TextChangedEventArgs e)
-        {
-            if (ViewSearch.Text.Length > 0)
-            {
-                List<string> mylist = new List<string>();
-                List<string> views = new List<string>(fileGenerator.getAllView());
-                mylist = views.FindAll(delegate (string s) { return s.ToLower().Contains(ViewSearch.Text.Trim().ToLower()); });
-                View.ItemsSource = mylist.ToArray();
-                View.IsDropDownOpen = true;
-            }
-            else
-            {
-                View.ItemsSource = fileGenerator.getAllGroup();
-            }
-        }
-
-        private void GroupSearch_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         private void GroupSearch_KeyUp_1(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (GroupSearch.Text.Length > 0)
