@@ -16,24 +16,24 @@
         <wpfx:CheckComboBox x:Name="Group" 
                             ItemsSource="{Binding}"
                             SelectedValue="{Binding SelectedValue}" Height="45
-                            " Margin="248,166,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322"/>
+                            " Margin="248,166,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="Group_ItemSelectionChanged"/>
         <Button x:Name="Generate" Content="Generate" Margin="481,456,0,0" FontSize="16" Click="Generate_Click" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="89"/>
         <TextBlock HorizontalAlignment="Left" Margin="40,231,0,0" TextWrapping="Wrap" Text="View" VerticalAlignment="Top" Height="45
                    " Width="155" FontSize="18"/>
-        <wpfx:CheckComboBox x:Name="View" 
+        <local:MyCheckComboBox x:Name="View" 
                             ItemsSource="{Binding}"
                             SelectedValue="{Binding SelectedValue}" Height="45
-                            " Margin="248,259,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322">
-        </wpfx:CheckComboBox>
-        <wpfx:CheckComboBox x:Name="ElementType" ItemsSource="{Binding}"
-                            SelectedValue="{Binding SelectedValue}" Margin="248,53,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="322"/>
+                            " Margin="248,259,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="View_ItemSelectionChanged">
+        </local:MyCheckComboBox>
+        <local:MyCheckComboBox x:Name="ElementType" ItemsSource="{Binding}"
+                            SelectedValue="{Binding SelectedValue}" Margin="248,53,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="ElementType_ItemSelectionChanged"/>
         <TextBlock HorizontalAlignment="Left" Margin="40,324,0,0" TextWrapping="Wrap" Text="Generate to projects" VerticalAlignment="Top" Height="45
                    " Width="155" FontSize="16"/>
-        <wpfx:CheckComboBox x:Name="Project" 
+        <local:MyCheckComboBox x:Name="Project" 
                             ItemsSource="{Binding}"
                             SelectedValue="{Binding SelectedValue}" Height="45
                             " Margin="248,324,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322">
-        </wpfx:CheckComboBox>
+        </local:MyCheckComboBox>
         <TextBox x:Name="ViewSearch" HorizontalAlignment="Left" Height="23" Margin="248,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" KeyUp="ViewSearch_KeyUp_1" />
         <TextBox x:Name="GroupSearch" TextWrapping="Wrap" KeyUp="GroupSearch_KeyUp_1" Margin="248,138,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" Height="23" />
         <TextBlock HorizontalAlignment="Left" Margin="40,389,0,0" TextWrapping="Wrap" Text="Name space" VerticalAlignment="Top" Height="23" Width="155" FontSize="16"/>

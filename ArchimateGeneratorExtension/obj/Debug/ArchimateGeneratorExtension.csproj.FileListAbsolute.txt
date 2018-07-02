@@ -1,3 +1,4 @@
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\ArchimateGeneratorExtension.dll.config
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\ArchimateGeneratorExtension.dll
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\ArchimateGeneratorExtension.pkgdef
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\ArchimateGeneratorExtension.vsix
@@ -75,6 +76,12 @@ D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGenerato
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\zh-Hans\Microsoft.VisualStudio.Validation.resources.dll
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\zh-Hant\Microsoft.VisualStudio.Validation.resources.dll
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\zh-Hans\Microsoft.VisualStudio.GraphModel.resources.dll
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\GenerationWindow.g.cs
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension_MarkupCompile.cache
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension_MarkupCompile.lref
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\GenerationWindow.baml
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.g.resources
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\VSPackage.resources
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.csproj.GenerateResource.cache
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\GenerateCommandPackage.cto
@@ -89,11 +96,4 @@ D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGenerato
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.pkgdef
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.latest.pkgdef
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\extension.vsixmanifest
-D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\GenerationWindow.g.cs
-D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\GeneratedInternalTypeHelper.g.cs
-D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension_MarkupCompile.cache
-D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension_MarkupCompile.lref
-D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\GenerationWindow.baml
-D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.g.resources
-D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\ArchimateGeneratorExtension.dll.config
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.csprojAssemblyReference.cache

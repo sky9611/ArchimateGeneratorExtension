@@ -112,16 +112,6 @@ namespace ArchimateGeneratorExtension
                 message = "error: File type not correct";
             string title = "ArchimateGenerateExtension";
 
-            // show a message box to prove we were here
-            VsShellUtilities.ShowMessageBox(
-                this.package,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-            
             string path_out;
             FileGenerator fileGenerator = new FileGenerator(path_in);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
@@ -130,7 +120,16 @@ namespace ArchimateGeneratorExtension
             else
                 path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
 
-            fileGenerator.Generate(path_out,null,null,null,"Maidis.Vnext.");
+            fileGenerator.Generate(path_out, fileGenerator.getAllType(), fileGenerator.getAllGroup(), fileGenerator.getAllView(), "Maidis.Vnext.");
+
+            // show a message box to prove we were here
+            VsShellUtilities.ShowMessageBox(
+                this.package,
+                message,
+                title,
+                OLEMSGICON.OLEMSGICON_INFO,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
 
         private void Generate2(object sender, EventArgs e)
@@ -168,9 +167,9 @@ namespace ArchimateGeneratorExtension
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
             string message;
             if (isCorrectFileType(path_in))
-                message = "error: File generated with the former setting";
+                message = "File generated with the former setting";
             else
-                message = "File type not correct";
+                message = "error: File type not correct";
             string title = "ArchimateGenerateExtension";
 
             // show a message box to prove we were here
@@ -218,8 +217,8 @@ namespace ArchimateGeneratorExtension
             {
                 foreach(var path in projects_paths)
                 {
-                    fileGenerator.Generate(path + "\\FileGenerated.cs", element_types, groups, views, name_space);
-                    dict_path_project[path].ProjectItems.AddFromFile(path + "\\FileGenerated.cs");
+                    fileGenerator.Generate(path + "FileGenerated.cs", element_types, groups, views, name_space);
+                    dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
                 }
             }
         }

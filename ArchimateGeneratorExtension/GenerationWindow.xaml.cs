@@ -6,9 +6,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Xceed.Wpf.Toolkit;
+using Xceed.Wpf.Toolkit.Primitives;
 
 namespace ArchimateGeneratorExtension
 {
+    public class MyCheckComboBox : CheckComboBox
+    {
+        protected override void UpdateText()
+        {
+            // Do not display the “Select All” in the TextBox.
+            var selectedItemsList = this.SelectedItems.Cast<object>().Select(x => this.GetItemDisplayValue(x)).Where(x => !x.Equals("Select All"));
+
+            var newValue = String.Join(this.Delimiter, selectedItemsList);
+            if (String.IsNullOrEmpty(this.Text) || !this.Text.Equals(newValue))
+            {
+                this.SetCurrentValue(CheckComboBox.TextProperty, newValue);
+            }
+        }
+    }
     /// <summary>
     /// Interaction logic for GenerationWindow.xaml
     /// </summary>
@@ -27,9 +43,18 @@ namespace ArchimateGeneratorExtension
             fileGenerator = new FileGenerator(path_in);
             this.projects = projects;
             InitializeComponent();
-            ElementType.ItemsSource = fileGenerator.getAllType();
-            Group.ItemsSource = fileGenerator.getAllGroup();
-            View.ItemsSource = fileGenerator.getAllView();
+
+            ElementType.Items.Add("Select All");
+            foreach (var i in fileGenerator.getAllType())
+                ElementType.Items.Add(i);
+
+            Group.Items.Add("Select All");
+            foreach (var i in fileGenerator.getAllGroup())
+                Group.Items.Add(i);
+
+            View.Items.Add("Select All");
+            foreach (var i in fileGenerator.getAllView())
+                View.Items.Add(i);
             List<string> list_project_name = new List<string>(); 
             foreach(var p in projects)
             {
@@ -70,7 +95,8 @@ namespace ArchimateGeneratorExtension
             List<string> list_type = new List<string>();
             foreach (var i in ElementType.SelectedItems)
             {
-                list_type.Add(i.ToString());
+                if(!i.ToString().Equals("Select All"))
+                    list_type.Add(i.ToString());
             }
             string[] types = list_type.ToArray();
             string str_types = String.Join(",", types.Select(i => i.ToString()).ToArray());
@@ -78,7 +104,8 @@ namespace ArchimateGeneratorExtension
             List<string> list_group = new List<string>();
             foreach (var i in Group.SelectedItems)
             {
-                list_group.Add(i.ToString());
+                if (!i.ToString().Equals("Select All"))
+                    list_group.Add(i.ToString());
             }
             string[] groups = list_group.ToArray();
             string str_groups = String.Join(",", groups.Select(i => i.ToString()).ToArray());
@@ -86,7 +113,8 @@ namespace ArchimateGeneratorExtension
             List<string> list_view = new List<string>();
             foreach (var i in View.SelectedItems)
             {
-                list_view.Add(i.ToString());
+                if (!i.ToString().Equals("Select All"))
+                    list_view.Add(i.ToString());
             }
             string[] views = list_view.ToArray();
             string str_views = String.Join(",", views.Select(i => i.ToString()).ToArray());
@@ -156,6 +184,90 @@ namespace ArchimateGeneratorExtension
         private void NameSpace_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void ElementType_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
+        {
+            var item = e.Item;
+            if (item.Equals( "Select All" ))
+            {
+                // Select All
+                if (e.IsSelected)
+                {
+                    foreach (var data in ElementType.Items)
+                    {
+                        var selectorItem = ElementType.ItemContainerGenerator.ContainerFromItem(data) as SelectorItem;
+                        if ((selectorItem != null) && !selectorItem.IsSelected)
+                        {
+                            ElementType.SelectedItems.Add(data);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // UnSelect an item => make sure the “Select All” option is not selected.
+                if (!e.IsSelected)
+                {
+                    ElementType.SelectedItems.Remove("Select All");
+                }
+            }
+        }
+
+        private void Group_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        {
+            var item = e.Item;
+            if (item.Equals("Select All"))
+            {
+                // Select All
+                if (e.IsSelected)
+                {
+                    foreach (var data in Group.Items)
+                    {
+                        var selectorItem = Group.ItemContainerGenerator.ContainerFromItem(data) as SelectorItem;
+                        if ((selectorItem != null) && !selectorItem.IsSelected)
+                        {
+                            Group.SelectedItems.Add(data);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // UnSelect an item => make sure the “Select All” option is not selected.
+                if (!e.IsSelected)
+                {
+                    ElementType.SelectedItems.Remove("Select All");
+                }
+            }
+        }
+
+        private void View_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        {
+            var item = e.Item;
+            if (item.Equals("Select All"))
+            {
+                // Select All
+                if (e.IsSelected)
+                {
+                    foreach (var data in View.Items)
+                    {
+                        var selectorItem = View.ItemContainerGenerator.ContainerFromItem(data) as SelectorItem;
+                        if ((selectorItem != null) && !selectorItem.IsSelected)
+                        {
+                            View.SelectedItems.Add(data);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // UnSelect an item => make sure the “Select All” option is not selected.
+                if (!e.IsSelected)
+                {
+                    View.SelectedItems.Remove("Select All");
+                }
+            }
         }
     }
 }
