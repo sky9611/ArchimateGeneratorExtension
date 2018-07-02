@@ -107,17 +107,18 @@ namespace ArchimateGeneratorExtension
             UserSettings.Default.Groups = str_groups;
             UserSettings.Default.Views = str_views;
             UserSettings.Default.Projects_paths = str_selectedProjects;
+            UserSettings.Default.Name_space = NameSpace.Text;
             UserSettings.Default.Save();
 
             if (selectedProjects.Count()>0)
                 foreach(var path in selectedProjects)
                 {
-                    fileGenerator.Generate(path + "FileGenerated.cs", types, groups, views);
+                    fileGenerator.Generate(path + "FileGenerated.cs", types, groups, views, NameSpace.Text);
                     dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
                     //dict_path_project[path].
                 }
             else
-                fileGenerator.Generate(output_path, types, groups, views);
+                fileGenerator.Generate(output_path, types, groups, views, NameSpace.Text);
         }
 
         private void GroupSearch_KeyUp_1(object sender, System.Windows.Input.KeyEventArgs e)
@@ -150,6 +151,11 @@ namespace ArchimateGeneratorExtension
             {
                 View.ItemsSource = fileGenerator.getAllGroup();
             }
+        }
+
+        private void NameSpace_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -70,5 +70,17 @@ namespace ArchimateGeneratorExtension {
                 this["Projects_paths"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Name_space {
+            get {
+                return ((string)(this["Name_space"]));
+            }
+            set {
+                this["Name_space"] = value;
+            }
+        }
     }
 }

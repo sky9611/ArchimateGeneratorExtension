@@ -130,7 +130,7 @@ namespace ArchimateGeneratorExtension
             else
                 path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
 
-            fileGenerator.Generate(path_out,null,null,null);
+            fileGenerator.Generate(path_out,null,null,null,"Maidis.Vnext.");
         }
 
         private void Generate2(object sender, EventArgs e)
@@ -194,6 +194,7 @@ namespace ArchimateGeneratorExtension
             string str_groups = UserSettings.Default.Groups;
             string str_views = UserSettings.Default.Views;
             string str_projects_paths = UserSettings.Default.Projects_paths;
+            string name_space = UserSettings.Default.Name_space;
 
             string[] element_types = str_types.Length>0 ? str_types.Split(',').ToList().ToArray() : null;
             string[] groups = str_groups.Length>0 ? str_groups.Split(',').ToList().ToArray() : null;
@@ -211,13 +212,13 @@ namespace ArchimateGeneratorExtension
 
             if (str_projects_paths.Length==0)
             {
-                fileGenerator.Generate(path_out, element_types, groups, views);
+                fileGenerator.Generate(path_out, element_types, groups, views, name_space);
             }
             else
             {
                 foreach(var path in projects_paths)
                 {
-                    fileGenerator.Generate(path + "\\FileGenerated.cs", element_types, groups, views);
+                    fileGenerator.Generate(path + "\\FileGenerated.cs", element_types, groups, views, name_space);
                     dict_path_project[path].ProjectItems.AddFromFile(path + "\\FileGenerated.cs");
                 }
             }
