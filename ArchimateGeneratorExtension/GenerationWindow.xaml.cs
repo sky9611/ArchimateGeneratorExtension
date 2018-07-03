@@ -1,8 +1,10 @@
 ﻿using EnvDTE;
 using FichierGenerator;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -166,14 +168,37 @@ namespace ArchimateGeneratorExtension
             UserSettings.Default.Save();
 
             if (selectedProjects.Count()>0)
-                foreach(var path in selectedProjects)
+            {
+                foreach (var path in selectedProjects)
                 {
+                    try
+                    {
+                        ProjectItem item = dict_path_project[path].ProjectItems.Item("FileGenerated.cs");
+                        String filename = item.get_FileNames(0);
+                        item.Remove(); // remove the item from project
+                        System.IO.File.Delete(filename); //delete the file
+                    }
+                    catch{ }
+                    //dict_path_project[path].ProjectItems.
+                    //File.Delete(path + "FileGenerated.cs");
+                    //System.Threading.Thread.Sleep(500);
                     fileGenerator.Generate(path + "FileGenerated.cs", types, groups, views, NameSpace.Text);
                     dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
-                    //dict_path_project[path].
+                    //dict_path_project[path].Save(path);
+                    //dict_path_project[path].DTE.ExecuteCommand("dict_path_project[path].UnloadProject", "");
+                    //System.Threading.Thread.Sleep(500);
+                    //dict_path_project[path].DTE.ExecuteCommand("dict_path_project[path].ReloadProject", "");
                 }
+            }
             else
+            {
                 fileGenerator.Generate(output_path, types, groups, views, NameSpace.Text);
+
+            }
+
+            MessageBoxResult result = System.Windows.MessageBox.Show("File generated", "Confirmation");
+            this.Close();
+            
         }
 
         private void GroupSearch_KeyUp_1(object sender, System.Windows.Input.KeyEventArgs e)
