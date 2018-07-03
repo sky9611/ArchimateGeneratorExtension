@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="Element_type" HorizontalAlignment="Left" Margin="40,53,0,0" TextWrapping="Wrap" Text="Element type" VerticalAlignment="Top" Height="45" Width="155" FontSize="18"/>
         <TextBlock HorizontalAlignment="Left" Margin="40,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="45                    " Width="155" FontSize="18"><Run Text="Group"/></TextBlock>
-        <wpfx:CheckComboBox x:Name="Group" 
+        <local:MyCheckComboBox x:Name="Group" 
                             ItemsSource="{Binding}"
                             SelectedValue="{Binding SelectedValue}" Height="45
                             " Margin="248,166,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="Group_ItemSelectionChanged"/>

@@ -203,6 +203,11 @@ namespace ArchimateGeneratorExtension
                         }
                     }
                 }
+                else
+                {
+                    for (int i = ElementType.SelectedItems.Count - 1; i >= 0; i--)
+                        ElementType.SelectedItems.RemoveAt(i);
+                }
             }
             else
             {
@@ -231,13 +236,18 @@ namespace ArchimateGeneratorExtension
                         }
                     }
                 }
+                else
+                {
+                    for (int i = Group.SelectedItems.Count-1; i >= 0; i--)
+                        Group.SelectedItems.RemoveAt(i);
+                }
             }
             else
             {
                 // UnSelect an item => make sure the “Select All” option is not selected.
                 if (!e.IsSelected)
                 {
-                    ElementType.SelectedItems.Remove("Select All");
+                    Group.SelectedItems.Remove("Select All");
                 }
             }
         }
@@ -258,6 +268,11 @@ namespace ArchimateGeneratorExtension
                             View.SelectedItems.Add(data);
                         }
                     }
+                }
+                else
+                {
+                    for (int i = View.SelectedItems.Count - 1; i >= 0; i--)
+                        View.SelectedItems.RemoveAt(i);
                 }
             }
             else
