@@ -32,29 +32,34 @@ namespace ArchimateGeneratorExtension
     {
         string input_path;
         string output_path;
+        string name_space;
         FileGenerator fileGenerator;
         IEnumerable<Project> projects;
         Dictionary<string, Project> dict_name_project = new Dictionary<string, Project>();
 
-        public GenerationWindow(string path_in, string path_out, IEnumerable<Project> projects)
+        public GenerationWindow(string path_in, string path_out, string name_space, IEnumerable<Project> projects)
         {
             input_path = path_in;
             output_path = path_out;
+            this.name_space = name_space;
+            
             fileGenerator = new FileGenerator(path_in);
             this.projects = projects;
             InitializeComponent();
 
-            ElementType.Items.Add("Select All");
-            foreach (var i in fileGenerator.getAllType())
-                ElementType.Items.Add(i);
+            NameSpace.Text = name_space;
+            List<string> types = fileGenerator.getAllType().ToList();
+            types.Insert(0, "Select all");
+            ElementType.ItemsSource = types;
 
-            Group.Items.Add("Select All");
-            foreach (var i in fileGenerator.getAllGroup())
-                Group.Items.Add(i);
+            List<string> groups = fileGenerator.getAllGroup().ToList();
+            groups.Insert(0, "Select all");
+            Group.ItemsSource = groups;
 
-            View.Items.Add("Select All");
-            foreach (var i in fileGenerator.getAllView())
-                View.Items.Add(i);
+            List<string> views = fileGenerator.getAllView().ToList();
+            views.Insert(0, "Select all");
+            View.ItemsSource = views;
+
             List<string> list_project_name = new List<string>(); 
             foreach(var p in projects)
             {
@@ -156,6 +161,10 @@ namespace ArchimateGeneratorExtension
                 List<string> mylist = new List<string>();
                 List<string> groups = new List<string>(fileGenerator.getAllGroup());
                 mylist = groups.FindAll(delegate (string s) { return s.ToLower().Contains(GroupSearch.Text.Trim().ToLower()); });
+                foreach(var i in mylist)
+                {
+
+                }
                 Group.ItemsSource = mylist.ToArray();
                 Group.IsDropDownOpen = true;
             }
@@ -186,40 +195,7 @@ namespace ArchimateGeneratorExtension
 
         }
 
-        private void ElementType_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
-        {
-            var item = e.Item;
-            if (item.Equals( "Select All" ))
-            {
-                // Select All
-                if (e.IsSelected)
-                {
-                    foreach (var data in ElementType.Items)
-                    {
-                        var selectorItem = ElementType.ItemContainerGenerator.ContainerFromItem(data) as SelectorItem;
-                        if ((selectorItem != null) && !selectorItem.IsSelected)
-                        {
-                            ElementType.SelectedItems.Add(data);
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = ElementType.SelectedItems.Count - 1; i >= 0; i--)
-                        ElementType.SelectedItems.RemoveAt(i);
-                }
-            }
-            else
-            {
-                // UnSelect an item => make sure the “Select All” option is not selected.
-                if (!e.IsSelected)
-                {
-                    ElementType.SelectedItems.Remove("Select All");
-                }
-            }
-        }
-
-        private void Group_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        private void ItemSelectionChanged(ItemSelectionChangedEventArgs e, MyCheckComboBox box)
         {
             var item = e.Item;
             if (item.Equals("Select All"))
@@ -227,19 +203,19 @@ namespace ArchimateGeneratorExtension
                 // Select All
                 if (e.IsSelected)
                 {
-                    foreach (var data in Group.Items)
+                    foreach (var data in box.Items)
                     {
-                        var selectorItem = Group.ItemContainerGenerator.ContainerFromItem(data) as SelectorItem;
+                        var selectorItem = box.ItemContainerGenerator.ContainerFromItem(data) as SelectorItem;
                         if ((selectorItem != null) && !selectorItem.IsSelected)
                         {
-                            Group.SelectedItems.Add(data);
+                            box.SelectedItems.Add(data);
                         }
                     }
                 }
                 else
                 {
-                    for (int i = Group.SelectedItems.Count-1; i >= 0; i--)
-                        Group.SelectedItems.RemoveAt(i);
+                    for (int i = box.SelectedItems.Count - 1; i >= 0; i--)
+                        box.SelectedItems.RemoveAt(i);
                 }
             }
             else
@@ -252,37 +228,19 @@ namespace ArchimateGeneratorExtension
             }
         }
 
+        private void ElementType_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
+        {
+            ItemSelectionChanged(e, ElementType); 
+        }
+
+        private void Group_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        {
+            ItemSelectionChanged(e, Group);
+        }
+
         private void View_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
-            var item = e.Item;
-            if (item.Equals("Select All"))
-            {
-                // Select All
-                if (e.IsSelected)
-                {
-                    foreach (var data in View.Items)
-                    {
-                        var selectorItem = View.ItemContainerGenerator.ContainerFromItem(data) as SelectorItem;
-                        if ((selectorItem != null) && !selectorItem.IsSelected)
-                        {
-                            View.SelectedItems.Add(data);
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = View.SelectedItems.Count - 1; i >= 0; i--)
-                        View.SelectedItems.RemoveAt(i);
-                }
-            }
-            else
-            {
-                // UnSelect an item => make sure the “Select All” option is not selected.
-                if (!e.IsSelected)
-                {
-                    View.SelectedItems.Remove("Select All");
-                }
-            }
+            ItemSelectionChanged(e, View);
         }
     }
 }

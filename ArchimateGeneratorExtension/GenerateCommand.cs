@@ -249,7 +249,7 @@ namespace ArchimateGeneratorExtension
         private void ShowGenerationWindow()
         {
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
-            var generationControl = new GenerationWindow(GetSourceFilePath(), generateCommandPackage.Output_path_ + "\\FileGenerated.cs", GetProjects());
+            var generationControl = new GenerationWindow(GetSourceFilePath(), generateCommandPackage.Output_path_ + "\\FileGenerated.cs", generateCommandPackage.Name_space_, GetProjects());
             generationControl.ShowDialog();
         }
 

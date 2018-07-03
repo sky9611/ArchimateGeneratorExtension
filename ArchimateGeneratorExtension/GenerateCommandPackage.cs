@@ -62,6 +62,15 @@ namespace ArchimateGeneratorExtension
             }
         }
 
+        public string Name_space_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.Name_space_;
+            }
+        }
+
         //#region Package Members
 
         ///// <summary>
@@ -85,6 +94,7 @@ namespace ArchimateGeneratorExtension
     public class OptionPageGrid : DialogPage
     {
         private string output_path_ = "";
+        private string name_space_ = "Maidis.Vnext.";
 
         [Category("Archimate Generator Extension")]
         [DisplayName("Output path")]
@@ -95,6 +105,14 @@ namespace ArchimateGeneratorExtension
             set { output_path_ = value; }
         }
 
+        [Category("Archimate Generator Extension")]
+        [DisplayName("Name space")]
+        [Description("The prefix of namespace")]
+        public string Name_space_
+        {
+            get { return name_space_; }
+            set { name_space_ = value; }
+        }
     }
 
     //[Guid("00000000-0000-0000-0000-000000000000")]
