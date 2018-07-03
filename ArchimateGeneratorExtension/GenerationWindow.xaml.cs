@@ -30,9 +30,14 @@ namespace ArchimateGeneratorExtension
     /// </summary>
     public partial class GenerationWindow
     {
+        // variable to avoid recalling selectchanged event 
+        private bool handleSelection = true;
         string input_path;
         string output_path;
         string name_space;
+        string[] _groups;
+        string[] _views;
+        string[] _types;
         FileGenerator fileGenerator;
         IEnumerable<Project> projects;
         Dictionary<string, Project> dict_name_project = new Dictionary<string, Project>();
@@ -48,17 +53,34 @@ namespace ArchimateGeneratorExtension
             InitializeComponent();
 
             NameSpace.Text = name_space;
-            List<string> types = fileGenerator.getAllType().ToList();
-            types.Insert(0, "Select all");
-            ElementType.ItemsSource = types;
 
-            List<string> groups = fileGenerator.getAllGroup().ToList();
-            groups.Insert(0, "Select all");
-            Group.ItemsSource = groups;
+            //List<string> types = fileGenerator.getAllType().ToList();
+            //types.Insert(0, "Select all");
+            //ElementType.ItemsSource = types;
 
-            List<string> views = fileGenerator.getAllView().ToList();
-            views.Insert(0, "Select all");
-            View.ItemsSource = views;
+            //List<string> groups = fileGenerator.getAllGroup().ToList();
+            //groups.Insert(0, "Select all");
+            //Group.ItemsSource = groups;
+
+            //List<string> views = fileGenerator.getAllView().ToList();
+            //views.Insert(0, "Select all");
+            //View.ItemsSource = views;
+
+            _types = fileGenerator.getAllType();
+            _groups = fileGenerator.getAllGroup();
+            _views = fileGenerator.getAllView();
+
+            ElementType.Items.Add("Select All");
+            foreach (var i in _types)
+                ElementType.Items.Add(i);
+
+            Group.Items.Add("Select All");
+            foreach (var i in _groups)
+                Group.Items.Add(i);
+
+            View.Items.Add("Select All");
+            foreach (var i in _views)
+                View.Items.Add(i);
 
             List<string> list_project_name = new List<string>(); 
             foreach(var p in projects)
@@ -156,37 +178,45 @@ namespace ArchimateGeneratorExtension
 
         private void GroupSearch_KeyUp_1(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            Group.Items.Clear();
             if (GroupSearch.Text.Length > 0)
             {
                 List<string> mylist = new List<string>();
-                List<string> groups = new List<string>(fileGenerator.getAllGroup());
+                List<string> groups = new List<string>(_groups);
                 mylist = groups.FindAll(delegate (string s) { return s.ToLower().Contains(GroupSearch.Text.Trim().ToLower()); });
                 foreach(var i in mylist)
-                {
-
-                }
-                Group.ItemsSource = mylist.ToArray();
+                    Group.Items.Add(i);
+                //Group.ItemsSource = mylist.ToArray();
                 Group.IsDropDownOpen = true;
             }
             else
             {
-                Group.ItemsSource = fileGenerator.getAllGroup();
+                //Group.ItemsSource = fileGenerator.getAllGroup();
+                Group.Items.Add("Select All");
+                foreach (var i in _groups)
+                    Group.Items.Add(i);
             }
         }
 
         private void ViewSearch_KeyUp_1(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            View.Items.Clear();
             if (ViewSearch.Text.Length > 0)
             {
                 List<string> mylist = new List<string>();
-                List<string> views = new List<string>(fileGenerator.getAllView());
+                List<string> views = new List<string>(_views);
                 mylist = views.FindAll(delegate (string s) { return s.ToLower().Contains(ViewSearch.Text.Trim().ToLower()); });
-                View.ItemsSource = mylist.ToArray();
+                foreach (var i in mylist)
+                    View.Items.Add(i);
+                //View.ItemsSource = mylist.ToArray();
                 View.IsDropDownOpen = true;
             }
             else
             {
-                View.ItemsSource = fileGenerator.getAllGroup();
+                //View.ItemsSource = fileGenerator.getAllGroup();
+                View.Items.Add("Select All");
+                foreach (var i in _views)
+                    View.Items.Add(i);
             }
         }
 
@@ -223,24 +253,39 @@ namespace ArchimateGeneratorExtension
                 // UnSelect an item => make sure the “Select All” option is not selected.
                 if (!e.IsSelected)
                 {
-                    Group.SelectedItems.Remove("Select All");
+                    box.SelectedItems.Remove("Select All");
                 }
             }
         }
 
         private void ElementType_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
         {
-            ItemSelectionChanged(e, ElementType); 
+            if(handleSelection)
+            {
+                handleSelection = false;
+                ItemSelectionChanged(e, ElementType);
+            }
+            handleSelection = true;
         }
 
         private void Group_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
-            ItemSelectionChanged(e, Group);
+            if (handleSelection)
+            {
+                handleSelection = false;
+                ItemSelectionChanged(e, Group);
+            }
+            handleSelection = true;
         }
 
         private void View_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
-            ItemSelectionChanged(e, View);
+            if (handleSelection)
+            {
+                handleSelection = false;
+                ItemSelectionChanged(e, View);
+            }
+            handleSelection = true;
         }
     }
 }
