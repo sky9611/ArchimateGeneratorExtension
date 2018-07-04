@@ -197,7 +197,7 @@ namespace ArchimateGeneratorExtension
             }
 
             MessageBoxResult result = System.Windows.MessageBox.Show("File generated", "Confirmation");
-            this.Close();
+            Close();
             
         }
 

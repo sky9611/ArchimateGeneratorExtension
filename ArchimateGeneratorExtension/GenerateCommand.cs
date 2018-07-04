@@ -250,7 +250,7 @@ namespace ArchimateGeneratorExtension
         {
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             var generationControl = new GenerationWindow(GetSourceFilePath(), generateCommandPackage.Output_path_ + "\\FileGenerated.cs", generateCommandPackage.Name_space_, GetProjects());
-            generationControl.ShowDialog();
+            generationControl.ShowModal();
         }
 
         private bool isCorrectFileType(string file_name)
