@@ -33,6 +33,9 @@ namespace ArchimateGeneratorExtension
     public partial class GenerationWindow
     {
         // variable to avoid recalling selectchanged event 
+        List<string> list_type = new List<string>();
+        List<string> list_group = new List<string>();
+        List<string> list_view = new List<string>();
         private bool handleSelection = true;
         string input_path;
         string output_path;
@@ -75,7 +78,6 @@ namespace ArchimateGeneratorExtension
             _types = fileGenerator.getAllType();
             _groups = fileGenerator.getAllGroup();
             _views = fileGenerator.getAllView();
-            _elements = fileGenerator.getAllElements();
 
             ElementType.Items.Add("Select All");
             foreach (var i in _types)
@@ -88,10 +90,6 @@ namespace ArchimateGeneratorExtension
             View.Items.Add("Select All");
             foreach (var i in _views)
                 View.Items.Add(i);
-
-            Element.Items.Add("Select All");
-            foreach (var i in _elements)
-                Element.Items.Add(i);
 
             List<string> list_project_name = new List<string>(); 
             foreach(var p in projects)
@@ -129,31 +127,13 @@ namespace ArchimateGeneratorExtension
                 path_out = input_path.Replace(input_path.Substring(input_path.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
             else
                 path_out = output_path + "\\FileGenerated.cs";
-
-            List<string> list_type = new List<string>();
-            foreach (var i in ElementType.SelectedItems)
-            {
-                if(!i.ToString().Equals("Select All"))
-                    list_type.Add(i.ToString());
-            }
+            
             string[] types = list_type.ToArray();
             string str_types = String.Join(",", types.Select(i => i.ToString()).ToArray());
-
-            List<string> list_group = new List<string>();
-            foreach (var i in Group.SelectedItems)
-            {
-                if (!i.ToString().Equals("Select All"))
-                    list_group.Add(i.ToString());
-            }
+            
             string[] groups = list_group.ToArray();
             string str_groups = String.Join(",", groups.Select(i => i.ToString()).ToArray());
-
-            List<string> list_view = new List<string>();
-            foreach (var i in View.SelectedItems)
-            {
-                if (!i.ToString().Equals("Select All"))
-                    list_view.Add(i.ToString());
-            }
+            
             string[] views = list_view.ToArray();
             string str_views = String.Join(",", views.Select(i => i.ToString()).ToArray());
 
@@ -262,7 +242,7 @@ namespace ArchimateGeneratorExtension
             }
         }
 
-        private void ItemSelectionChanged(ItemSelectionChangedEventArgs e, MyCheckComboBox box)
+        private Boolean ItemSelectionChanged(ItemSelectionChangedEventArgs e, MyCheckComboBox box)
         {
             var item = e.Item;
             if (item.Equals("Select All"))
@@ -278,12 +258,15 @@ namespace ArchimateGeneratorExtension
                             box.SelectedItems.Add(data);
                         }
                     }
+                    return true;
                 }
                 else
                 {
                     for (int i = box.SelectedItems.Count - 1; i >= 0; i--)
                         box.SelectedItems.RemoveAt(i);
+                    return false;
                 }
+
             }
             else
             {
@@ -292,37 +275,103 @@ namespace ArchimateGeneratorExtension
                 {
                     box.SelectedItems.Remove("Select All");
                 }
+                return false;
             }
         }
 
         private void ElementType_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
         {
+            Boolean select_all = false;
             if(handleSelection)
             {
                 handleSelection = false;
-                ItemSelectionChanged(e, ElementType);
+                select_all = ItemSelectionChanged(e, ElementType);
             }
             handleSelection = true;
+
+            list_type.Clear();
+            foreach (var i in ElementType.SelectedItems)
+            {
+                if (!i.ToString().Equals("Select All"))
+                    list_type.Add(i.ToString());
+            }
+
+            if (select_all)
+            {
+                _elements = fileGenerator.getAllElements();
+                Element.Items.Clear();
+                foreach (var i in _elements)
+                    Element.Items.Add(i);
+            }
+            else
+                UpdateElements();
+            
+
+           
+        }
+
+        private void UpdateElements()
+        {
+            _elements = fileGenerator.getElements(list_type.ToArray(), list_group.ToArray(), list_view.ToArray());
+            Element.Items.Clear();
+            foreach (var i in _elements)
+                Element.Items.Add(i);
         }
 
         private void Group_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
+            Boolean select_all = false;
             if (handleSelection)
             {
                 handleSelection = false;
-                ItemSelectionChanged(e, Group);
+                select_all = ItemSelectionChanged(e, Group);
             }
             handleSelection = true;
+
+            list_group.Clear();
+            foreach (var i in Group.SelectedItems)
+            {
+                if (!i.ToString().Equals("Select All"))
+                    list_group.Add(i.ToString());
+            }
+
+            if (e.Item.Equals("Select All"))
+            {
+                _elements = fileGenerator.getAllElements();
+                Element.Items.Clear();
+                foreach (var i in _elements)
+                    Element.Items.Add(i);
+            }
+            else
+                UpdateElements();
         }
 
         private void View_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
+            Boolean select_all = false;
             if (handleSelection)
             {
                 handleSelection = false;
-                ItemSelectionChanged(e, View);
+                select_all = ItemSelectionChanged(e, View);
             }
             handleSelection = true;
+
+            list_view.Clear();
+            foreach (var i in View.SelectedItems)
+            {
+                if (!i.ToString().Equals("Select All"))
+                    list_view.Add(i.ToString());
+            }
+
+            if (e.Item.Equals("Select All"))
+            {
+                _elements = fileGenerator.getAllElements();
+                Element.Items.Clear();
+                foreach (var i in _elements)
+                    Element.Items.Add(i);
+            }
+            else
+                UpdateElements();
         }
 
         private void ElementSearch_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
