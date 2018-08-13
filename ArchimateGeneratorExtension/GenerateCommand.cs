@@ -49,9 +49,6 @@ namespace ArchimateGeneratorExtension
         /// <param name="commandService">Command service to add command to, not null.</param>
         private GenerateCommand(AsyncPackage package, OleMenuCommandService commandService)
         {
-            EnvDTE80.DTE2 current_DTE2 = GetDTE2();
-            current_solution_path = System.IO.Path.GetDirectoryName(current_DTE2.Solution.FullName);
-            current_solution_name = current_DTE2.Solution.FileName;
 
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -121,6 +118,10 @@ namespace ArchimateGeneratorExtension
         /// <param name="e">Event args.</param>
         private void GenerateAll(object sender, EventArgs e)
         {
+
+            EnvDTE80.DTE2 current_DTE2 = GetDTE2();
+            current_solution_path = System.IO.Path.GetDirectoryName(current_DTE2.Solution.FullName);
+            current_solution_name = current_DTE2.Solution.FileName;
             string path_in = GetSourceFilePath();
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
@@ -153,6 +154,10 @@ namespace ArchimateGeneratorExtension
 
         private void Generate2(object sender, EventArgs e)
         {
+
+            EnvDTE80.DTE2 current_DTE2 = GetDTE2();
+            current_solution_path = System.IO.Path.GetDirectoryName(current_DTE2.Solution.FullName);
+            current_solution_name = current_DTE2.Solution.FileName;
             ThreadHelper.ThrowIfNotOnUIThread();
             string path_in = GetSourceFilePath();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
