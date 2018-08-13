@@ -192,30 +192,28 @@ namespace ArchimateGeneratorExtension
                 {
                     try
                     {
-                        ProjectItem item = dict_path_project[path].ProjectItems.Item("FileGenerated.cs");
-                        String filename = item.get_FileNames(0);
-                        item.Remove(); // remove the item from project
-                        System.IO.File.Delete(filename); //delete the file
+                        List<string> list_file_name = GetFilesNotInProject(dict_path_project[path]);
+                        foreach(var i in list_file_name)
+                        {
+                            ProjectItem item = dict_path_project[path].ProjectItems.Item(i);
+                            String filename = item.get_FileNames(0);
+                            item.Remove(); // remove the item from project
+                            System.IO.File.Delete(filename); //delete the file
+                        }
+                        
                     }
                     catch{ }
-                    //dict_path_project[path].ProjectItems.
-                    //File.Delete(path + "FileGenerated.cs");
-                    //System.Threading.Thread.Sleep(500);
                     fileGenerator.Generate(path, types, groups, views, elements, NameSpace.Text);
-                    dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
-                    //dict_path_project[path].Save(path);
-                    //dict_path_project[path].DTE.ExecuteCommand("dict_path_project[path].UnloadProject", "");
-                    //System.Threading.Thread.Sleep(500);
-                    //dict_path_project[path].DTE.ExecuteCommand("dict_path_project[path].ReloadProject", "");
+                    IncludeNewFiles(dict_path_project[path]);
                 }
             }
             else
             {
                 fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text);
-
             }
 
-            MessageBoxResult result = System.Windows.MessageBox.Show("File generated", "Confirmation");
+            MessageBoxResult result = System.Windows.MessageBox.Show(string.Join("\n", fileGenerator.Log["errors"]), "Errors");
+            System.Windows.MessageBox.Show(string.Join("\n", fileGenerator.Log["warnings"]), "Warnings");
             Close();
             
         }
@@ -357,6 +355,46 @@ namespace ArchimateGeneratorExtension
                 ItemSelectionChanged(e, Element);
             }
             handleSelection = true;
+        }
+
+        public static void IncludeNewFiles(Project project)
+        {
+            List<string> newfiles;
+
+            newfiles = GetFilesNotInProject(project);
+
+            foreach (var file in newfiles)
+                project.ProjectItems.AddFromFile(file);
+        }
+
+        public static List<string> GetAllProjectFiles(ProjectItems projectItems, string extension)
+        {
+            List<string> returnValue = new List<string>();
+
+            foreach (ProjectItem projectItem in projectItems)
+            {
+                for (short i = 1; i <= projectItems.Count; i++)
+                {
+                    string fileName = projectItem.FileNames[i];
+                    if (Path.GetExtension(fileName).ToLower() == extension)
+                        returnValue.Add(fileName);
+                }
+                returnValue.AddRange(GetAllProjectFiles(projectItem.ProjectItems, extension));
+            }
+
+            return returnValue;
+        }
+
+        public static List<string> GetFilesNotInProject(Project project)
+        {
+            List<string> returnValue = new List<string>();
+            string startPath = Path.GetDirectoryName(project.FullName);
+            List<string> projectFiles = GetAllProjectFiles(project.ProjectItems, ".cs");
+
+            foreach (var file in Directory.GetFiles(startPath, "*.cs", SearchOption.AllDirectories))
+                if (!projectFiles.Contains(file)) returnValue.Add(file);
+
+            return returnValue;
         }
     }
 }
