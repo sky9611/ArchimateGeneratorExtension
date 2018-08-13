@@ -40,17 +40,21 @@ namespace ArchimateGeneratorExtension
         string[] _groups;
         string[] _views;
         string[] _types;
+        string[] _elements;
         FileGenerator fileGenerator;
         IEnumerable<Project> projects;
         Dictionary<string, Project> dict_name_project = new Dictionary<string, Project>();
+        string current_solution_path;
+        string current_solution_name;
 
-        public GenerationWindow(string path_in, string path_out, string name_space, IEnumerable<Project> projects)
+        public GenerationWindow(string path_in, Dictionary<string, string> dict_implementation, string path_out, string name_space, IEnumerable<Project> projects, string current_solution_path, string current_solution_name)
         {
             input_path = path_in;
             output_path = path_out;
             this.name_space = name_space;
-            
-            fileGenerator = new FileGenerator(path_in);
+            this.current_solution_path = current_solution_path;
+            this.current_solution_name = current_solution_name;
+            fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path);
             this.projects = projects;
             InitializeComponent();
 
@@ -71,6 +75,7 @@ namespace ArchimateGeneratorExtension
             _types = fileGenerator.getAllType();
             _groups = fileGenerator.getAllGroup();
             _views = fileGenerator.getAllView();
+            _elements = fileGenerator.getAllElements();
 
             ElementType.Items.Add("Select All");
             foreach (var i in _types)
@@ -83,6 +88,10 @@ namespace ArchimateGeneratorExtension
             View.Items.Add("Select All");
             foreach (var i in _views)
                 View.Items.Add(i);
+
+            Element.Items.Add("Select All");
+            foreach (var i in _elements)
+                Element.Items.Add(i);
 
             List<string> list_project_name = new List<string>(); 
             foreach(var p in projects)
@@ -148,6 +157,15 @@ namespace ArchimateGeneratorExtension
             string[] views = list_view.ToArray();
             string str_views = String.Join(",", views.Select(i => i.ToString()).ToArray());
 
+            List<string> list_element = new List<string>();
+            foreach (var i in Element.SelectedItems)
+            {
+                if (!i.ToString().Equals("Select All"))
+                    list_view.Add(i.ToString());
+            }
+            string[] elements = list_view.ToArray();
+            string str_elements = String.Join(",", elements.Select(i => i.ToString()).ToArray());
+
             List<string> list_project = new List<string>();
             Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
             foreach (var i in Project.SelectedItems)
@@ -163,6 +181,7 @@ namespace ArchimateGeneratorExtension
             UserSettings.Default.ElementType = str_types;
             UserSettings.Default.Groups = str_groups;
             UserSettings.Default.Views = str_views;
+            UserSettings.Default.Elements = str_elements;
             UserSettings.Default.Projects_paths = str_selectedProjects;
             UserSettings.Default.Name_space = NameSpace.Text;
             UserSettings.Default.Save();
@@ -182,7 +201,7 @@ namespace ArchimateGeneratorExtension
                     //dict_path_project[path].ProjectItems.
                     //File.Delete(path + "FileGenerated.cs");
                     //System.Threading.Thread.Sleep(500);
-                    fileGenerator.Generate(path + "FileGenerated.cs", types, groups, views, NameSpace.Text);
+                    fileGenerator.Generate(path, types, groups, views, elements, NameSpace.Text);
                     dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
                     //dict_path_project[path].Save(path);
                     //dict_path_project[path].DTE.ExecuteCommand("dict_path_project[path].UnloadProject", "");
@@ -192,7 +211,7 @@ namespace ArchimateGeneratorExtension
             }
             else
             {
-                fileGenerator.Generate(output_path, types, groups, views, NameSpace.Text);
+                fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text);
 
             }
 
@@ -243,11 +262,6 @@ namespace ArchimateGeneratorExtension
                 foreach (var i in _views)
                     View.Items.Add(i);
             }
-        }
-
-        private void NameSpace_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
         }
 
         private void ItemSelectionChanged(ItemSelectionChangedEventArgs e, MyCheckComboBox box)
@@ -309,6 +323,38 @@ namespace ArchimateGeneratorExtension
             {
                 handleSelection = false;
                 ItemSelectionChanged(e, View);
+            }
+            handleSelection = true;
+        }
+
+        private void ElementSearch_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            Element.Items.Clear();
+            if (ViewSearch.Text.Length > 0)
+            {
+                List<string> mylist = new List<string>();
+                List<string> elements = new List<string>(_elements);
+                mylist = elements.FindAll(delegate (string s) { return s.ToLower().Contains(ViewSearch.Text.Trim().ToLower()); });
+                foreach (var i in mylist)
+                    Element.Items.Add(i);
+                //View.ItemsSource = mylist.ToArray();
+                View.IsDropDownOpen = true;
+            }
+            else
+            {
+                //View.ItemsSource = fileGenerator.getAllGroup();
+                View.Items.Add("Select All");
+                foreach (var i in _elements)
+                    View.Items.Add(i);
+            }
+        }
+
+        private void Element_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        {
+            if (handleSelection)
+            {
+                handleSelection = false;
+                ItemSelectionChanged(e, Element);
             }
             handleSelection = true;
         }

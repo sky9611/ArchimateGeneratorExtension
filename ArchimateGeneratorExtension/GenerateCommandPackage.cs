@@ -61,7 +61,6 @@ namespace ArchimateGeneratorExtension
                 return page.Output_path_;
             }
         }
-
         public string Name_space_
         {
             get
@@ -70,6 +69,63 @@ namespace ArchimateGeneratorExtension
                 return page.Name_space_;
             }
         }
+        public string BusinessObjectImplementation
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.BusinessObject_implementation_;
+            }
+        }
+        public string Contract_implementation_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.Contract_implementation_;
+            }
+        }
+        public string ApplicationEvent_implementation_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.ApplicationEvent_implementation_;
+            }
+        }
+        public string ApplicationComponent_implementation_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.ApplicationComponent_implementation_;
+            }
+        }
+        public string DataObject_implementation_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.DataObject_implementation_;
+            }
+        }
+        public string ApplicationProcess_implementation_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.ApplicationProcess_implementation_;
+            }
+        }
+        public string ApplicationService_implementation_
+        {
+            get
+            {
+                OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+                return page.ApplicationService_implementation_;
+            }
+        }
+
 
         //#region Package Members
 
@@ -86,6 +142,7 @@ namespace ArchimateGeneratorExtension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await GenerateCommand.InitializeAsync(this);
+            await MenuCommond.InitializeAsync(this);
         }
 
         //#endregion
@@ -95,6 +152,14 @@ namespace ArchimateGeneratorExtension
     {
         private string output_path_ = "";
         private string name_space_ = "Maidis.Vnext.";
+        private string businessObject_implementation_ = "IBusinessObject";
+        private string contract_implementation_ = "CContract";
+        private string applicationEvent_implementation_ = "EventArgs";
+        private string applicationComponent_implementation_ = "Component";
+        private string dataObject_implementation_ = "DAO";
+        private string applicationProcess_implementation_ = "UseCaseWorkflow";
+        private string applicationService_implementation_ = "UseCaseWorkflow";
+
 
         [Category("Archimate Generator Extension")]
         [DisplayName("Output path")]
@@ -113,6 +178,45 @@ namespace ArchimateGeneratorExtension
             get { return name_space_; }
             set { name_space_ = value; }
         }
+
+        [Category("Archimate Generator Extension")]
+        [DisplayName("BusinessObject Implementation")]
+        [Description("The Implementation of BusinessObject")]
+        public string BusinessObject_implementation_
+        {
+            get { return businessObject_implementation_; }
+            set { businessObject_implementation_ = value; }
+        }
+
+        [Category("Archimate Generator Extension")]
+        [DisplayName("ContractImplementation")]
+        [Description("The Implementation of Contract")]
+        public string Contract_implementation_
+        {
+            get { return contract_implementation_; }
+            set { contract_implementation_ = value; }
+        }
+
+        [Category("Archimate Generator Extension")]
+        [DisplayName("ApplicationEventImplementation")]
+        [Description("The Implementation of ApplicationEvent")]
+        public string ApplicationEvent_implementation_ { get => applicationEvent_implementation_; set => applicationEvent_implementation_ = value; }
+        [Category("Archimate Generator Extension")]
+        [DisplayName("ApplicationComponentImplementation")]
+        [Description("The Implementation of ApplicationComponent")]
+        public string ApplicationComponent_implementation_ { get => applicationComponent_implementation_; set => applicationComponent_implementation_ = value; }
+        [Category("Archimate Generator Extension")]
+        [DisplayName("DataObjectImplementation")]
+        [Description("The Implementation of DataObject")]
+        public string DataObject_implementation_ { get => dataObject_implementation_; set => dataObject_implementation_ = value; }
+        [Category("Archimate Generator Extension")]
+        [DisplayName("ApplicationProcessImplementation")]
+        [Description("The Implementation of ApplicationProcess")]
+        public string ApplicationProcess_implementation_ { get => applicationProcess_implementation_; set => applicationProcess_implementation_ = value; }
+        [Category("Archimate Generator Extension")]
+        [DisplayName("ApplicationServiceImplementation")]
+        [Description("The Implementation of ApplicationService")]
+        public string ApplicationService_implementation_ { get => applicationService_implementation_; set => applicationService_implementation_ = value; }
     }
 
     //[Guid("00000000-0000-0000-0000-000000000000")]

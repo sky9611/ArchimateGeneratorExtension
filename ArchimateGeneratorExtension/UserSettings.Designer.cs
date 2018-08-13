@@ -82,5 +82,17 @@ namespace ArchimateGeneratorExtension {
                 this["Name_space"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Elements {
+            get {
+                return ((string)(this["Elements"]));
+            }
+            set {
+                this["Elements"] = value;
+            }
+        }
     }
 }

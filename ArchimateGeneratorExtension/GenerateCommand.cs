@@ -7,6 +7,7 @@ using EnvDTE;
 using FichierGenerator;
 using System.Linq;
 using System.Collections.Generic;
+using Tools;
 
 namespace ArchimateGeneratorExtension
 {
@@ -15,6 +16,11 @@ namespace ArchimateGeneratorExtension
     /// </summary>
     internal sealed class GenerateCommand
     {
+        string current_solution_name;
+        string current_solution_path;
+
+        Dictionary<string, string> dict_implementation = new Dictionary<string, string>();
+
         private static readonly string[] all_file_types = { "xml" };
         /// <summary>
         /// Command ID.
@@ -43,6 +49,10 @@ namespace ArchimateGeneratorExtension
         /// <param name="commandService">Command service to add command to, not null.</param>
         private GenerateCommand(AsyncPackage package, OleMenuCommandService commandService)
         {
+            EnvDTE80.DTE2 current_DTE2 = GetDTE2();
+            current_solution_path = System.IO.Path.GetDirectoryName(current_DTE2.Solution.FullName);
+            current_solution_name = current_DTE2.Solution.FileName;
+
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
@@ -57,6 +67,15 @@ namespace ArchimateGeneratorExtension
             var menuCommandID3 = new CommandID(CommandSet, CommandId3);
             var menuItem3 = new MenuCommand(this.Generate3, menuCommandID3);
             commandService.AddCommand(menuItem3);
+
+            GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
+            dict_implementation.Add(ElementConstants.BusinessObject, generateCommandPackage.BusinessObjectImplementation);
+            dict_implementation.Add(ElementConstants.Contract, generateCommandPackage.Contract_implementation_);
+            dict_implementation.Add(ElementConstants.ApplicationEvent, generateCommandPackage.ApplicationEvent_implementation_);
+            dict_implementation.Add(ElementConstants.ApplicationComponent, generateCommandPackage.ApplicationComponent_implementation_);
+            dict_implementation.Add(ElementConstants.DataObject, generateCommandPackage.DataObject_implementation_);
+            dict_implementation.Add(ElementConstants.ApplicationProcess, generateCommandPackage.ApplicationProcess_implementation_);
+            dict_implementation.Add(ElementConstants.ApplicationService, generateCommandPackage.ApplicationService_implementation_);
         }
 
         /// <summary>
@@ -113,14 +132,14 @@ namespace ArchimateGeneratorExtension
             string title = "ArchimateGenerateExtension";
 
             string path_out;
-            FileGenerator fileGenerator = new FileGenerator(path_in);
+            FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
                 path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
             else
                 path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
 
-            fileGenerator.Generate(path_out, fileGenerator.getAllType(), fileGenerator.getAllGroup(), fileGenerator.getAllView(), "Maidis.Vnext.");
+            fileGenerator.Generate(path_out, fileGenerator.getAllType(), fileGenerator.getAllGroup(), fileGenerator.getAllView(), fileGenerator.getAllElements(), "Maidis.Vnext.");
 
             // show a message box to prove we were here
             VsShellUtilities.ShowMessageBox(
@@ -182,7 +201,7 @@ namespace ArchimateGeneratorExtension
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
 
             string path_out;
-            FileGenerator fileGenerator = new FileGenerator(path_in);
+            FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
                 path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
@@ -192,12 +211,14 @@ namespace ArchimateGeneratorExtension
             string str_types = UserSettings.Default.ElementType;
             string str_groups = UserSettings.Default.Groups;
             string str_views = UserSettings.Default.Views;
+            string str_elements = UserSettings.Default.Elements;
             string str_projects_paths = UserSettings.Default.Projects_paths;
             string name_space = UserSettings.Default.Name_space;
 
             string[] element_types = str_types.Length>0 ? str_types.Split(',').ToList().ToArray() : null;
             string[] groups = str_groups.Length>0 ? str_groups.Split(',').ToList().ToArray() : null;
             string[] views = str_views.Length>0 ? str_views.Split(',').ToList().ToArray() : null;
+            string[] elements = str_elements.Length > 0 ? str_elements.Split(',').ToList().ToArray() : null;
             string[] projects_paths = str_projects_paths.Length > 0 ? str_projects_paths.Split(',').ToList().ToArray() : null;
 
             var projects = GetProjects();
@@ -211,13 +232,13 @@ namespace ArchimateGeneratorExtension
 
             if (str_projects_paths.Length==0)
             {
-                fileGenerator.Generate(path_out, element_types, groups, views, name_space);
+                fileGenerator.Generate(path_out, element_types, groups, views, elements, name_space);
             }
             else
             {
                 foreach(var path in projects_paths)
                 {
-                    fileGenerator.Generate(path + "FileGenerated.cs", element_types, groups, views, name_space);
+                    fileGenerator.Generate(path + "FileGenerated.cs", element_types, groups, views, elements, name_space);
                     dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
                 }
             }
@@ -249,7 +270,7 @@ namespace ArchimateGeneratorExtension
         private void ShowGenerationWindow()
         {
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
-            var generationControl = new GenerationWindow(GetSourceFilePath(), generateCommandPackage.Output_path_ + "\\FileGenerated.cs", generateCommandPackage.Name_space_, GetProjects());
+            var generationControl = new GenerationWindow(GetSourceFilePath(), dict_implementation, generateCommandPackage.Output_path_ + "\\FileGenerated.cs", generateCommandPackage.Name_space_, GetProjects(), current_solution_path, current_solution_name);
             generationControl.ShowModal();
         }
 

@@ -1,0 +1,24 @@
+﻿<local:BaseDialogWindow x:Class="ArchimateGeneratorExtension.SolutionGenerationWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ArchimateGeneratorExtension"
+             mc:Ignorable="d" Width="687.143" Height="385.869">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="47*"/>
+            <ColumnDefinition Width="632*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="Element_type" HorizontalAlignment="Left" Margin="1.571,46,0,0" TextWrapping="Wrap" Text="XML path" VerticalAlignment="Top" Height="42" Width="174" FontSize="22" Grid.Column="1"/>
+        <TextBox x:Name="XMLPath" HorizontalAlignment="Left" Height="42" Margin="204.571,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="383" FontSize="22" Grid.Column="1" LostFocus="XMLPath_LostFocus"/>
+        <TextBlock x:Name="Element_type_Copy" HorizontalAlignment="Left" Margin="1.571,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="42" Width="174" FontSize="22" Grid.Column="1"><Run Text="Solution"/><Run Text=" path"/></TextBlock>
+        <TextBox x:Name="SolutionPath" HorizontalAlignment="Left" Height="42" Margin="204.571,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="383" FontSize="22" Grid.Column="1"/>
+        <TextBlock x:Name="Element_type_Copy1" HorizontalAlignment="Left" Margin="1.571,208,0,0" TextWrapping="Wrap" Text="Solution Name" VerticalAlignment="Top" Height="42" Width="174" FontSize="22" Grid.Column="1"/>
+        <local:MyCheckComboBox x:Name="SolutionName" 
+            ItemsSource="{Binding}"
+            SelectedValue="{Binding SelectedValue}" Height="45" Margin="205,236,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="383" ItemSelectionChanged="SolutionName_ItemSelectionChanged" Grid.Column="1"/>
+        <TextBox x:Name="SolutionSearch" HorizontalAlignment="Left" Height="23" Margin="205,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="383" KeyUp="SolutionSearch_KeyUp" Grid.Column="1" />
+        <Button x:Name="Generate" Content="Generate" Grid.Column="1" HorizontalAlignment="Left" Margin="483,303,0,0" VerticalAlignment="Top" Width="105" Click="Button_Click"/>
+    </Grid>
+</local:BaseDialogWindow>

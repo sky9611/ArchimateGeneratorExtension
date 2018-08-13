@@ -61,7 +61,11 @@
     <Compile Include="GenerationWindow.xaml.cs">
       <DependentUpon>GenerationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MenuCommond.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SolutionGenerationWindow.xaml.cs">
+      <DependentUpon>SolutionGenerationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserSettings.cs" />
     <Compile Include="UserSettings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -176,6 +180,10 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Tools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\FichierGenerator\FichierGenerator\lib\Tools.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -197,10 +205,15 @@
   <ItemGroup>
     <Content Include="Resources\GenerateCommand.png" />
     <Content Include="Resources\GenerateCommandPackage.ico" />
+    <Content Include="Resources\MenuCommondPackage.png" />
     <Content Include="Resources\search.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="GenerationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SolutionGenerationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
