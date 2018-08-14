@@ -51,5 +51,19 @@ namespace ArchimateGeneratorExtension
             foreach (var i in solutions)
                 SolutionName.Items.Add(i);
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog browse = new System.Windows.Forms.OpenFileDialog();
+            browse.ShowDialog();
+            XMLPath.Text = browse.FileName;
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog browse = new System.Windows.Forms.FolderBrowserDialog();
+            browse.ShowDialog();
+            SolutionPath.Text = browse.SelectedPath;
+        }
     }
 }

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ArchimateGeneratorExtension"
-             mc:Ignorable="d" Width="687.143" Height="385.869">
+             mc:Ignorable="d" Width="711.643" Height="385.869">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="47*"/>
@@ -20,5 +20,7 @@
             SelectedValue="{Binding SelectedValue}" Height="45" Margin="205,236,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="383" ItemSelectionChanged="SolutionName_ItemSelectionChanged" Grid.Column="1"/>
         <TextBox x:Name="SolutionSearch" HorizontalAlignment="Left" Height="23" Margin="205,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="383" KeyUp="SolutionSearch_KeyUp" Grid.Column="1" />
         <Button x:Name="Generate" Content="Generate" Grid.Column="1" HorizontalAlignment="Left" Margin="483,303,0,0" VerticalAlignment="Top" Width="105" Click="Button_Click"/>
+        <Button Content="..." Grid.Column="1" HorizontalAlignment="Left" Margin="593,46,0,0" VerticalAlignment="Top" Width="41" Height="42" Click="Button_Click_1" FontSize="18"/>
+        <Button Content="..." Grid.Column="1" HorizontalAlignment="Left" Margin="593,129,0,0" VerticalAlignment="Top" Width="41" Height="42" Click="Button_Click_2" FontSize="18"/>
     </Grid>
 </local:BaseDialogWindow>
