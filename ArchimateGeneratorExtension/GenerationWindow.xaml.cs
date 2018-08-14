@@ -299,7 +299,7 @@ namespace ArchimateGeneratorExtension
                 _elements = fileGenerator.getAllElements();
                 Element.Items.Clear();
                 foreach (var i in _elements)
-                    Element.Items.Add(i);
+                    Element.Items.Add(i + " (" + GetElementTypeByName(i) + ")");
             }
             else
             {
@@ -318,7 +318,12 @@ namespace ArchimateGeneratorExtension
             Element.Items.Clear();
             Element.Items.Add("Select All");
             foreach (var i in _elements)
-                Element.Items.Add(i);
+                Element.Items.Add(i + " ("+ GetElementTypeByName(i) + ")");
+        }
+
+        private string GetElementTypeByName(string name)
+        {
+            return fileGenerator.Dict_element.First(x => x.Value.Name_.Equals(name)).Value.Type_;
         }
 
         private void UpdateGroups()
@@ -365,7 +370,7 @@ namespace ArchimateGeneratorExtension
                 _elements = fileGenerator.getAllElements();
                 Element.Items.Clear();
                 foreach (var i in _elements)
-                    Element.Items.Add(i);
+                    Element.Items.Add(i + " (" + GetElementTypeByName(i) + ")");
             }
             else
                 UpdateElements();
@@ -392,7 +397,7 @@ namespace ArchimateGeneratorExtension
                 _elements = fileGenerator.getAllElements();
                 Element.Items.Clear();
                 foreach (var i in _elements)
-                    Element.Items.Add(i);
+                    Element.Items.Add(i + " (" + GetElementTypeByName(i) + ")");
             }
             else
                 UpdateElements();
