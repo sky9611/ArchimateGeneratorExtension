@@ -1,5 +1,6 @@
 ﻿using EnvDTE;
 using FichierGenerator;
+using JR.Utils.GUI.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -194,8 +195,8 @@ namespace ArchimateGeneratorExtension
             fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text);
             //}
 
-            MessageBoxResult result = System.Windows.MessageBox.Show(string.Join("\n", fileGenerator.Log["errors"]), "Errors");
-            System.Windows.MessageBox.Show(string.Join("\n", fileGenerator.Log["warnings"]), "Warnings");
+            FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["errors"]), "Errors");
+            FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["warnings"]), "Warnings");
             Close();
             
         }
