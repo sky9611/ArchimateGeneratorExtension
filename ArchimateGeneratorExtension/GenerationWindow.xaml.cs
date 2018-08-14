@@ -37,6 +37,8 @@ namespace ArchimateGeneratorExtension
         List<string> list_group = new List<string>();
         List<string> list_view = new List<string>();
         private bool handleSelection = true;
+        private bool select_all = false;
+        private bool unselect_all = false;
         string input_path;
         string output_path;
         string name_space;
@@ -242,11 +244,12 @@ namespace ArchimateGeneratorExtension
             }
         }
 
-        private Boolean ItemSelectionChanged(ItemSelectionChangedEventArgs e, MyCheckComboBox box)
+        private void ItemSelectionChanged(ItemSelectionChangedEventArgs e, MyCheckComboBox box)
         {
             var item = e.Item;
             if (item.Equals("Select All"))
             {
+                select_all = true;
                 // Select All
                 if (e.IsSelected)
                 {
@@ -258,15 +261,13 @@ namespace ArchimateGeneratorExtension
                             box.SelectedItems.Add(data);
                         }
                     }
-                    return true;
                 }
                 else
                 {
                     for (int i = box.SelectedItems.Count - 1; i >= 0; i--)
                         box.SelectedItems.RemoveAt(i);
-                    return false;
                 }
-
+                select_all = false;
             }
             else
             {
@@ -275,17 +276,15 @@ namespace ArchimateGeneratorExtension
                 {
                     box.SelectedItems.Remove("Select All");
                 }
-                return false;
             }
         }
 
         private void ElementType_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
         {
-            Boolean select_all = false;
             if(handleSelection)
             {
                 handleSelection = false;
-                select_all = ItemSelectionChanged(e, ElementType);
+                ItemSelectionChanged(e, ElementType);
             }
             handleSelection = true;
 
@@ -320,11 +319,10 @@ namespace ArchimateGeneratorExtension
 
         private void Group_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
-            Boolean select_all = false;
             if (handleSelection)
             {
                 handleSelection = false;
-                select_all = ItemSelectionChanged(e, Group);
+                ItemSelectionChanged(e, Group);
             }
             handleSelection = true;
 
@@ -335,7 +333,7 @@ namespace ArchimateGeneratorExtension
                     list_group.Add(i.ToString());
             }
 
-            if (e.Item.Equals("Select All"))
+            if (select_all)
             {
                 _elements = fileGenerator.getAllElements();
                 Element.Items.Clear();
@@ -348,11 +346,10 @@ namespace ArchimateGeneratorExtension
 
         private void View_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
-            Boolean select_all = false;
             if (handleSelection)
             {
                 handleSelection = false;
-                select_all = ItemSelectionChanged(e, View);
+                ItemSelectionChanged(e, View);
             }
             handleSelection = true;
 
@@ -363,7 +360,7 @@ namespace ArchimateGeneratorExtension
                     list_view.Add(i.ToString());
             }
 
-            if (e.Item.Equals("Select All"))
+            if (select_all)
             {
                 _elements = fileGenerator.getAllElements();
                 Element.Items.Clear();
