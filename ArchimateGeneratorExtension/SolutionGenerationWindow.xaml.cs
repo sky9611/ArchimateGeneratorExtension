@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Tools;
 
 namespace ArchimateGeneratorExtension
 {
@@ -35,14 +36,16 @@ namespace ArchimateGeneratorExtension
         {
             List<string> list_selected_solution = new List<string>();
             foreach (var i in SolutionName.SelectedItems)
+            {
                 fileGenerator.GenerateSolution(@SolutionPath.Text, i.ToString());
-
+                File.Copy(@XMLPath.Text, Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
+            }
         }
 
         private void XMLPath_LostFocus(object sender, RoutedEventArgs e)
         {
             if (XMLPath.Text.Length>0)
-                fileGenerator = new FileGenerator(XMLPath.Text, new Dictionary<string, string>(), "", "");
+                fileGenerator = new FileGenerator(@XMLPath.Text, new Dictionary<string, string>(), "", "");
 
             solutions = fileGenerator.getAllSolutions();
             foreach (var i in solutions)

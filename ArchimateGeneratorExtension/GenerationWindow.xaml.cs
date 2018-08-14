@@ -36,7 +36,6 @@ namespace ArchimateGeneratorExtension
         List<string> list_view = new List<string>();
         private bool handleSelection = true;
         private bool select_all = false;
-        private bool unselect_all = false;
         string input_path;
         string output_path;
         string name_space;
@@ -44,14 +43,17 @@ namespace ArchimateGeneratorExtension
         string[] _views;
         string[] _types;
         string[] _elements;
+        string[] _projects;
         FileGenerator fileGenerator;
         IEnumerable<Project> projects;
         Dictionary<string, Project> dict_name_project = new Dictionary<string, Project>();
         string current_solution_path;
         string current_solution_name;
+        Solution solution;
 
-        public GenerationWindow(string path_in, Dictionary<string, string> dict_implementation, string path_out, string name_space, IEnumerable<Project> projects, string current_solution_path, string current_solution_name)
+        public GenerationWindow(string path_in, Dictionary<string, string> dict_implementation, string path_out, string name_space, IEnumerable<Project> projects, string current_solution_path, string current_solution_name, Solution solution)
         {
+            this.solution = solution; 
             input_path = path_in;
             output_path = path_out;
             this.name_space = name_space;
@@ -78,6 +80,7 @@ namespace ArchimateGeneratorExtension
             _types = fileGenerator.getAllType();
             _groups = fileGenerator.getAllGroup();
             _views = fileGenerator.getAllView();
+            _projects = fileGenerator.GetProjects(solution);
 
             ElementType.Items.Add("Select All");
             foreach (var i in _types)
@@ -91,7 +94,11 @@ namespace ArchimateGeneratorExtension
             foreach (var i in _views)
                 View.Items.Add(i);
 
-            
+            Project.Items.Add("Select All");
+            foreach (var i in _projects)
+                Project.Items.Add(i);
+
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -305,6 +312,9 @@ namespace ArchimateGeneratorExtension
         private void UpdateElements()
         {
             _elements = fileGenerator.getElements(list_type.ToArray(), list_group.ToArray(), list_view.ToArray());
+            List<string> list = _elements.ToList();
+            list.Sort();
+            _elements = list.ToArray();
             Element.Items.Clear();
             Element.Items.Add("Select All");
             foreach (var i in _elements)
@@ -314,6 +324,9 @@ namespace ArchimateGeneratorExtension
         private void UpdateGroups()
         {
             _groups = fileGenerator.getGroups(list_type.ToArray());
+            List<string> list = _groups.ToList();
+            list.Sort();
+            _groups = list.ToArray();
             Group.Items.Clear();
             Group.Items.Add("Select All");
             foreach (var i in _groups)
@@ -322,6 +335,9 @@ namespace ArchimateGeneratorExtension
         private void UpdateViews()
         {
             _views = fileGenerator.getViews(list_type.ToArray());
+            List<string> list = _views.ToList();
+            list.Sort();
+            _views = list.ToArray();
             View.Items.Clear();
             View.Items.Add("Select All");
             foreach (var i in _views)
@@ -389,19 +405,19 @@ namespace ArchimateGeneratorExtension
             {
                 List<string> mylist = new List<string>();
                 List<string> elements = new List<string>(_elements);
-                mylist = elements.FindAll(delegate (string s) { return s.ToLower().Contains(ViewSearch.Text.Trim().ToLower()); });
+                mylist = elements.FindAll(delegate (string s) { return s.ToLower().Contains(ElementSearch.Text.Trim().ToLower()); });
                 mylist.Sort();
                 foreach (var i in mylist)
                     Element.Items.Add(i);
                 //View.ItemsSource = mylist.ToArray();
-                View.IsDropDownOpen = true;
+                Element.IsDropDownOpen = true;
             }
             else
             {
                 //View.ItemsSource = fileGenerator.getAllGroup();
-                View.Items.Add("Select All");
+                Element.Items.Add("Select All");
                 foreach (var i in _elements)
-                    View.Items.Add(i);
+                    Element.Items.Add(i);
             }
         }
 
@@ -453,6 +469,51 @@ namespace ArchimateGeneratorExtension
                 if (!projectFiles.Contains(file)) returnValue.Add(file);
 
             return returnValue;
+        }
+
+        private void ProjectSearch_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            Project.Items.Clear();
+            if (Project.Text.Length > 0)
+            {
+                List<string> mylist = new List<string>();
+                List<string> projects = new List<string>(_projects);
+                mylist = projects.FindAll(delegate (string s) { return s.ToLower().Contains(ProjectSearch.Text.Trim().ToLower()); });
+                mylist.Sort();
+                foreach (var i in mylist)
+                    Project.Items.Add(i);
+                //View.ItemsSource = mylist.ToArray();
+                Project.IsDropDownOpen = true;
+            }
+            else
+            {
+                //View.ItemsSource = fileGenerator.getAllGroup();
+                Project.Items.Add("Select All");
+                foreach (var i in _projects)
+                    Project.Items.Add(i);
+            }
+        }
+
+        private void Project_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        {
+            if (handleSelection)
+            {
+                handleSelection = false;
+                ItemSelectionChanged(e, Project);
+            }
+            handleSelection = true;
+        }
+
+        private void Generate_Projects_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> list_project = new List<string>();
+            foreach (var i in Project.SelectedItems)
+            {
+                if (!i.ToString().Equals("Select All"))
+                    list_project.Add(i.ToString());
+            }
+            foreach(var i in list_project)
+                fileGenerator.GenerateProject(solution, i);
         }
     }
 }

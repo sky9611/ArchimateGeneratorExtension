@@ -254,6 +254,12 @@ namespace ArchimateGeneratorExtension
         {
             return Package.GetGlobalService(typeof(DTE)) as EnvDTE80.DTE2;
         }
+
+        private static DTE GetDTE()
+        {
+            return Package.GetGlobalService(typeof(DTE)) as DTE;
+        }
+
         private string GetSourceFilePath()
         {
             EnvDTE80.DTE2 _applicationObject = GetDTE2();
@@ -275,7 +281,7 @@ namespace ArchimateGeneratorExtension
         private void ShowGenerationWindow()
         {
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
-            var generationControl = new GenerationWindow(GetSourceFilePath(), dict_implementation, generateCommandPackage.Output_path_ + "\\FileGenerated.cs", generateCommandPackage.Name_space_, GetProjects(), current_solution_path, current_solution_name);
+            var generationControl = new GenerationWindow(GetSourceFilePath(), dict_implementation, generateCommandPackage.Output_path_ + "\\FileGenerated.cs", generateCommandPackage.Name_space_, GetProjects(), current_solution_path, current_solution_name, GetDTE().Solution);
             generationControl.ShowModal();
         }
 

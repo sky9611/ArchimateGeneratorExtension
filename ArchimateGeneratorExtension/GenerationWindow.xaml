@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ArchimateGeneratorExtension"
                         xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
-                        mc:Ignorable="d" Height="534.041" Width="580.18">
+                        mc:Ignorable="d" Height="663.041" Width="580.18">
     <Grid Margin="0,0,2,7">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -17,7 +17,7 @@
                             ItemsSource="{Binding}"
                             SelectedValue="{Binding SelectedValue}" Height="45
                             " Margin="228,116,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="Group_ItemSelectionChanged"/>
-        <Button x:Name="Generate" Content="Generate" Margin="461,444,0,0" FontSize="16" Click="Generate_Click" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="89"/>
+        <Button x:Name="Generate" Content="Generate Elements" Margin="392,541,0,0" FontSize="16" Click="Generate_Click" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="158" RenderTransformOrigin="-0.005,2.078"/>
         <TextBlock HorizontalAlignment="Left" Margin="20,183,0,0" TextWrapping="Wrap" Text="View" VerticalAlignment="Top" Height="45
                    " Width="155" FontSize="18"/>
         <local:MyCheckComboBox x:Name="View" 
@@ -29,12 +29,18 @@
                             SelectedValue="{Binding SelectedValue}" Margin="228,19,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="ElementType_ItemSelectionChanged"/>
         <TextBox x:Name="ViewSearch" HorizontalAlignment="Left" Height="23" Margin="228,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" KeyUp="ViewSearch_KeyUp_1" />
         <TextBox x:Name="GroupSearch" TextWrapping="Wrap" KeyUp="GroupSearch_KeyUp_1" Margin="228,88,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" Height="23" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,376,0,0" TextWrapping="Wrap" Text="Default namespace prefix" VerticalAlignment="Top" Height="46" Width="155" FontSize="16"/>
-        <TextBox x:Name="NameSpace" HorizontalAlignment="Left" Height="46" Margin="228,376,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" FontSize="16" />
+        <TextBlock HorizontalAlignment="Left" Margin="20,479,0,0" TextWrapping="Wrap" Text="Default namespace prefix" VerticalAlignment="Top" Height="46" Width="155" FontSize="16"/>
+        <TextBox x:Name="NameSpace" HorizontalAlignment="Left" Height="46" Margin="228,479,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" FontSize="16" />
         <TextBlock HorizontalAlignment="Left" Margin="20,279,0,0" TextWrapping="Wrap" Text="Element" VerticalAlignment="Top" Height="45                    " Width="155" FontSize="18"/>
         <local:MyCheckComboBox x:Name="Element" 
             ItemsSource="{Binding}"
             SelectedValue="{Binding SelectedValue}" Height="45" Margin="228,307,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="Element_ItemSelectionChanged"/>
         <TextBox x:Name="ElementSearch" HorizontalAlignment="Left" Height="23" Margin="228,279,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" KeyUp="ElementSearch_KeyUp" />
+        <TextBlock HorizontalAlignment="Left" Margin="20,382,0,0" TextWrapping="Wrap" Text="Project" VerticalAlignment="Top" Height="46" Width="155" FontSize="18"/>
+        <local:MyCheckComboBox x:Name="Project" 
+            ItemsSource="{Binding}"
+            SelectedValue="{Binding SelectedValue}" Height="45" Margin="228,410,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="Project_ItemSelectionChanged"/>
+        <TextBox x:Name="ProjectSearch" HorizontalAlignment="Left" Height="23" Margin="228,382,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" KeyUp="ProjectSearch_KeyUp" />
+        <Button x:Name="Generate_Projects" Content="Generate Projects" Margin="412,578,0,0" FontSize="16" Click="Generate_Projects_Click" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="138"/>
     </Grid>
 </local:BaseDialogWindow>
