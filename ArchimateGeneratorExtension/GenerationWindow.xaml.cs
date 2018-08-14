@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
@@ -142,9 +143,9 @@ namespace ArchimateGeneratorExtension
             foreach (var i in Element.SelectedItems)
             {
                 if (!i.ToString().Equals("Select All"))
-                    list_view.Add(i.ToString());
+                    list_element.Add(Regex.Replace(i.ToString(), @" ?\(.*?\)", string.Empty));
             }
-            string[] elements = list_view.ToArray();
+            string[] elements = list_element.ToArray();
             string str_elements = String.Join(",", elements.Select(i => i.ToString()).ToArray());
 
             //List<string> list_project = new List<string>();
@@ -318,7 +319,7 @@ namespace ArchimateGeneratorExtension
             Element.Items.Clear();
             Element.Items.Add("Select All");
             foreach (var i in _elements)
-                Element.Items.Add(i + " ("+ GetElementTypeByName(i) + ")");
+                Element.Items.Add(i + "("+ GetElementTypeByName(i) + ")");
         }
 
         private string GetElementTypeByName(string name)
@@ -370,7 +371,7 @@ namespace ArchimateGeneratorExtension
                 _elements = fileGenerator.getAllElements();
                 Element.Items.Clear();
                 foreach (var i in _elements)
-                    Element.Items.Add(i + " (" + GetElementTypeByName(i) + ")");
+                    Element.Items.Add(i + "(" + GetElementTypeByName(i) + ")");
             }
             else
                 UpdateElements();
@@ -397,7 +398,7 @@ namespace ArchimateGeneratorExtension
                 _elements = fileGenerator.getAllElements();
                 Element.Items.Clear();
                 foreach (var i in _elements)
-                    Element.Items.Add(i + " (" + GetElementTypeByName(i) + ")");
+                    Element.Items.Add(i + "(" + GetElementTypeByName(i) + ")");
             }
             else
                 UpdateElements();
