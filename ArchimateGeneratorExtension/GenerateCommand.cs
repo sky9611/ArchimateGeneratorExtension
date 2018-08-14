@@ -217,14 +217,14 @@ namespace ArchimateGeneratorExtension
             string str_groups = UserSettings.Default.Groups;
             string str_views = UserSettings.Default.Views;
             string str_elements = UserSettings.Default.Elements;
-            string str_projects_paths = UserSettings.Default.Projects_paths;
+            //string str_projects_paths = UserSettings.Default.Projects_paths;
             string name_space = UserSettings.Default.Name_space;
 
             string[] element_types = str_types.Length>0 ? str_types.Split(',').ToList().ToArray() : null;
             string[] groups = str_groups.Length>0 ? str_groups.Split(',').ToList().ToArray() : null;
             string[] views = str_views.Length>0 ? str_views.Split(',').ToList().ToArray() : null;
             string[] elements = str_elements.Length > 0 ? str_elements.Split(',').ToList().ToArray() : null;
-            string[] projects_paths = str_projects_paths.Length > 0 ? str_projects_paths.Split(',').ToList().ToArray() : null;
+            //string[] projects_paths = str_projects_paths.Length > 0 ? str_projects_paths.Split(',').ToList().ToArray() : null;
 
             var projects = GetProjects();
             Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
@@ -235,18 +235,18 @@ namespace ArchimateGeneratorExtension
                 dict_path_project.Add(project_path, p);
             }
 
-            if (str_projects_paths.Length==0)
-            {
-                fileGenerator.Generate(path_out, element_types, groups, views, elements, name_space);
-            }
-            else
-            {
-                foreach(var path in projects_paths)
-                {
-                    fileGenerator.Generate(path + "FileGenerated.cs", element_types, groups, views, elements, name_space);
-                    dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
-                }
-            }
+            //if (str_projects_paths.Length==0)
+            //{
+            fileGenerator.Generate(path_out, element_types, groups, views, elements, name_space);
+            //}
+            //else
+            //{
+            //    foreach(var path in projects_paths)
+            //    {
+            //        fileGenerator.Generate(path + "FileGenerated.cs", element_types, groups, views, elements, name_space);
+            //        dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
+            //    }
+            //}
         }
 
 

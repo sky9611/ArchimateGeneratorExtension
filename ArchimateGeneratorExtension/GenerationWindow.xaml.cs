@@ -1,7 +1,5 @@
 ﻿using EnvDTE;
 using FichierGenerator;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -93,13 +91,7 @@ namespace ArchimateGeneratorExtension
             foreach (var i in _views)
                 View.Items.Add(i);
 
-            List<string> list_project_name = new List<string>(); 
-            foreach(var p in projects)
-            {
-                list_project_name.Add(p.Name);
-                dict_name_project.Add(p.Name, p);
-            }
-            Project.ItemsSource = list_project_name;
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -148,51 +140,51 @@ namespace ArchimateGeneratorExtension
             string[] elements = list_view.ToArray();
             string str_elements = String.Join(",", elements.Select(i => i.ToString()).ToArray());
 
-            List<string> list_project = new List<string>();
-            Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
-            foreach (var i in Project.SelectedItems)
-            {
-                var fullName = dict_name_project[i.ToString()].FullName;
-                var project_path = fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), "");
-                list_project.Add(project_path);
-                dict_path_project.Add(project_path, dict_name_project[i.ToString()]);
-            }
-            string[] selectedProjects = list_project.ToArray();
-            string str_selectedProjects = String.Join(",", selectedProjects.Select(i => i.ToString()).ToArray());
+            //List<string> list_project = new List<string>();
+            //Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
+            //foreach (var i in Project.SelectedItems)
+            //{
+            //    var fullName = dict_name_project[i.ToString()].FullName;
+            //    var project_path = fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), "");
+            //    list_project.Add(project_path);
+            //    dict_path_project.Add(project_path, dict_name_project[i.ToString()]);
+            //}
+            //string[] selectedProjects = list_project.ToArray();
+            //string str_selectedProjects = String.Join(",", selectedProjects.Select(i => i.ToString()).ToArray());
 
             UserSettings.Default.ElementType = str_types;
             UserSettings.Default.Groups = str_groups;
             UserSettings.Default.Views = str_views;
             UserSettings.Default.Elements = str_elements;
-            UserSettings.Default.Projects_paths = str_selectedProjects;
+            //UserSettings.Default.Projects_paths = str_selectedProjects;
             UserSettings.Default.Name_space = NameSpace.Text;
             UserSettings.Default.Save();
 
-            if (selectedProjects.Count()>0)
-            {
-                foreach (var path in selectedProjects)
-                {
-                    try
-                    {
-                        List<string> list_file_name = GetFilesNotInProject(dict_path_project[path]);
-                        foreach(var i in list_file_name)
-                        {
-                            ProjectItem item = dict_path_project[path].ProjectItems.Item(i);
-                            String filename = item.get_FileNames(0);
-                            item.Remove(); // remove the item from project
-                            System.IO.File.Delete(filename); //delete the file
-                        }
+            //if (selectedProjects.Count()>0)
+            //{
+            //    foreach (var path in selectedProjects)
+            //    {
+            //        try
+            //        {
+            //            List<string> list_file_name = GetFilesNotInProject(dict_path_project[path]);
+            //            foreach(var i in list_file_name)
+            //            {
+            //                ProjectItem item = dict_path_project[path].ProjectItems.Item(i);
+            //                String filename = item.get_FileNames(0);
+            //                item.Remove(); // remove the item from project
+            //                System.IO.File.Delete(filename); //delete the file
+            //            }
                         
-                    }
-                    catch{ }
-                    fileGenerator.Generate(path, types, groups, views, elements, NameSpace.Text);
-                    IncludeNewFiles(dict_path_project[path]);
-                }
-            }
-            else
-            {
-                fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text);
-            }
+            //        }
+            //        catch{ }
+            //        fileGenerator.Generate(path, types, groups, views, elements, NameSpace.Text);
+            //        IncludeNewFiles(dict_path_project[path]);
+            //    }
+            //}
+            //else
+            //{
+            fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text);
+            //}
 
             MessageBoxResult result = System.Windows.MessageBox.Show(string.Join("\n", fileGenerator.Log["errors"]), "Errors");
             System.Windows.MessageBox.Show(string.Join("\n", fileGenerator.Log["warnings"]), "Warnings");
@@ -303,18 +295,37 @@ namespace ArchimateGeneratorExtension
                     Element.Items.Add(i);
             }
             else
+            {
+                UpdateGroups();
+                UpdateViews();
                 UpdateElements();
-            
-
-           
+            }
         }
 
         private void UpdateElements()
         {
             _elements = fileGenerator.getElements(list_type.ToArray(), list_group.ToArray(), list_view.ToArray());
             Element.Items.Clear();
+            Element.Items.Add("Select All");
             foreach (var i in _elements)
                 Element.Items.Add(i);
+        }
+
+        private void UpdateGroups()
+        {
+            _groups = fileGenerator.getGroups(list_type.ToArray());
+            Group.Items.Clear();
+            Group.Items.Add("Select All");
+            foreach (var i in _groups)
+                Group.Items.Add(i);
+        }
+        private void UpdateViews()
+        {
+            _views = fileGenerator.getViews(list_type.ToArray());
+            View.Items.Clear();
+            View.Items.Add("Select All");
+            foreach (var i in _views)
+                View.Items.Add(i);
         }
 
         private void Group_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
@@ -374,11 +385,12 @@ namespace ArchimateGeneratorExtension
         private void ElementSearch_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
             Element.Items.Clear();
-            if (ViewSearch.Text.Length > 0)
+            if (Element.Text.Length > 0)
             {
                 List<string> mylist = new List<string>();
                 List<string> elements = new List<string>(_elements);
                 mylist = elements.FindAll(delegate (string s) { return s.ToLower().Contains(ViewSearch.Text.Trim().ToLower()); });
+                mylist.Sort();
                 foreach (var i in mylist)
                     Element.Items.Add(i);
                 //View.ItemsSource = mylist.ToArray();

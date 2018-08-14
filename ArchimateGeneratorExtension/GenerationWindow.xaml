@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ArchimateGeneratorExtension"
                         xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
-                        mc:Ignorable="d" Height="586.541" Width="580.18">
+                        mc:Ignorable="d" Height="534.041" Width="580.18">
     <Grid Margin="0,0,2,7">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -17,7 +17,7 @@
                             ItemsSource="{Binding}"
                             SelectedValue="{Binding SelectedValue}" Height="45
                             " Margin="228,116,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="Group_ItemSelectionChanged"/>
-        <Button x:Name="Generate" Content="Generate" Margin="461,502,0,0" FontSize="16" Click="Generate_Click" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="89"/>
+        <Button x:Name="Generate" Content="Generate" Margin="461,444,0,0" FontSize="16" Click="Generate_Click" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Width="89"/>
         <TextBlock HorizontalAlignment="Left" Margin="20,183,0,0" TextWrapping="Wrap" Text="View" VerticalAlignment="Top" Height="45
                    " Width="155" FontSize="18"/>
         <local:MyCheckComboBox x:Name="View" 
@@ -27,15 +27,10 @@
         </local:MyCheckComboBox>
         <local:MyCheckComboBox x:Name="ElementType" ItemsSource="{Binding}"
                             SelectedValue="{Binding SelectedValue}" Margin="228,19,0,0" VerticalAlignment="Top" Height="45" HorizontalAlignment="Left" Width="322" ItemSelectionChanged="ElementType_ItemSelectionChanged"/>
-        <TextBlock HorizontalAlignment="Left" Margin="20,370,0,0" TextWrapping="Wrap" Text="Generate to projects" VerticalAlignment="Top" Height="44" Width="155" FontSize="16"/>
-        <local:MyCheckComboBox x:Name="Project" 
-                            ItemsSource="{Binding}"
-                            SelectedValue="{Binding SelectedValue}" Height="44" Margin="228,370,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322">
-        </local:MyCheckComboBox>
         <TextBox x:Name="ViewSearch" HorizontalAlignment="Left" Height="23" Margin="228,183,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" KeyUp="ViewSearch_KeyUp_1" />
         <TextBox x:Name="GroupSearch" TextWrapping="Wrap" KeyUp="GroupSearch_KeyUp_1" Margin="228,88,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="322" Height="23" />
-        <TextBlock HorizontalAlignment="Left" Margin="20,434,0,0" TextWrapping="Wrap" Text="Name space" VerticalAlignment="Top" Height="24" Width="155" FontSize="16"/>
-        <TextBox x:Name="NameSpace" HorizontalAlignment="Left" Height="46" Margin="228,434,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" FontSize="16" />
+        <TextBlock HorizontalAlignment="Left" Margin="20,376,0,0" TextWrapping="Wrap" Text="Default namespace prefix" VerticalAlignment="Top" Height="46" Width="155" FontSize="16"/>
+        <TextBox x:Name="NameSpace" HorizontalAlignment="Left" Height="46" Margin="228,376,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" FontSize="16" />
         <TextBlock HorizontalAlignment="Left" Margin="20,279,0,0" TextWrapping="Wrap" Text="Element" VerticalAlignment="Top" Height="45                    " Width="155" FontSize="18"/>
         <local:MyCheckComboBox x:Name="Element" 
             ItemsSource="{Binding}"

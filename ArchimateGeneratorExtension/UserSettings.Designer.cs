@@ -62,18 +62,6 @@ namespace ArchimateGeneratorExtension {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Projects_paths {
-            get {
-                return ((string)(this["Projects_paths"]));
-            }
-            set {
-                this["Projects_paths"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Name_space {
             get {
                 return ((string)(this["Name_space"]));
