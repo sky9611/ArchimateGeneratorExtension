@@ -72,6 +72,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>UserSettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="WaitCursor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

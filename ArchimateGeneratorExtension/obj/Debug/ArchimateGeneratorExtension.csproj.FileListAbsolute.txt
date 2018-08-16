@@ -100,3 +100,4 @@ D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGenerato
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.latest.pkgdef
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\extension.vsixmanifest
 D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\bin\Debug\FichierGenerator.pdb
+D:\documents\INSA\maidis\vs\Projet\ArchimateGeneratorExtension\ArchimateGeneratorExtension\obj\Debug\ArchimateGeneratorExtension.csprojAssemblyReference.cache

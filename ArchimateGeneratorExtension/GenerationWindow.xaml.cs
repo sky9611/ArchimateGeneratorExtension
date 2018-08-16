@@ -61,7 +61,12 @@ namespace ArchimateGeneratorExtension
             this.name_space = name_space;
             this.current_solution_path = current_solution_path;
             this.current_solution_name = current_solution_name;
-            fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path);
+            using (new WaitCursor())
+            {
+                // very long task
+                fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path);
+            }
+            
             this.projects = projects;
             InitializeComponent();
 
@@ -183,7 +188,7 @@ namespace ArchimateGeneratorExtension
             //                item.Remove(); // remove the item from project
             //                System.IO.File.Delete(filename); //delete the file
             //            }
-                        
+
             //        }
             //        catch{ }
             //        fileGenerator.Generate(path, types, groups, views, elements, NameSpace.Text);
@@ -192,7 +197,12 @@ namespace ArchimateGeneratorExtension
             //}
             //else
             //{
-            fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text);
+            using (new WaitCursor())
+            {
+                // very long task
+                fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text);
+            }
+            
             //}
 
             FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["errors"]), "Errors");
