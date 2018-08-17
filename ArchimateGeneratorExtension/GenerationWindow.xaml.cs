@@ -534,6 +534,7 @@ namespace ArchimateGeneratorExtension
                 foreach (var i in list_project)
                     fileGenerator.GenerateProject(solution, i);
             }
+            fileGenerator.AddProjectReferences(solution);
         }
     }
 }
