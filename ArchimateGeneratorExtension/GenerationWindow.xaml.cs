@@ -200,7 +200,7 @@ namespace ArchimateGeneratorExtension
             using (new WaitCursor())
             {
                 // very long task
-                fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text);
+                fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text, solution);
             }
             
             //}
@@ -529,8 +529,11 @@ namespace ArchimateGeneratorExtension
                 if (!i.ToString().Equals("Select All"))
                     list_project.Add(i.ToString());
             }
-            foreach(var i in list_project)
-                fileGenerator.GenerateProject(solution, i);
+            using (new WaitCursor())
+            {
+                foreach (var i in list_project)
+                    fileGenerator.GenerateProject(solution, i);
+            }
         }
     }
 }

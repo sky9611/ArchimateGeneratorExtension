@@ -37,19 +37,35 @@ namespace ArchimateGeneratorExtension
             List<string> list_selected_solution = new List<string>();
             foreach (var i in SolutionName.SelectedItems)
             {
-                fileGenerator.GenerateSolution(@SolutionPath.Text, i.ToString());
+                // Display wait cursor
+                using (new WaitCursor())
+                {
+                    fileGenerator.GenerateSolution(@SolutionPath.Text, i.ToString());
+                }
+
+                // Copy the XML to the solution folder
                 File.Copy(@XMLPath.Text, Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
             }
         }
 
         private void XMLPath_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (XMLPath.Text.Length>0)
-                fileGenerator = new FileGenerator(@XMLPath.Text, new Dictionary<string, string>(), "", "");
+            // Display wait cursor
+            using (new WaitCursor())
+            {
+                if (XMLPath.Text.Length > 0)
+                {
+                    fileGenerator = new FileGenerator(@XMLPath.Text, new Dictionary<string, string>(), "", "");
 
-            solutions = fileGenerator.getAllSolutions();
-            foreach (var i in solutions)
-                SolutionName.Items.Add(i);
+                    solutions = fileGenerator.getAllSolutions();
+
+                    int n = solutions.Length;
+
+                    foreach (var i in solutions)
+                        SolutionName.Items.Add(i);
+                }
+                    
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
