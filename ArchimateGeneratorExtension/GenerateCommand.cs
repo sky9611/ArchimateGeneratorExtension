@@ -118,7 +118,6 @@ namespace ArchimateGeneratorExtension
         /// <param name="e">Event args.</param>
         private void GenerateAll(object sender, EventArgs e)
         {
-
             EnvDTE80.DTE2 current_DTE2 = GetDTE2();
             current_solution_path = System.IO.Path.GetDirectoryName(current_DTE2.Solution.FullName);
             current_solution_name = current_DTE2.Solution.FileName;
@@ -133,7 +132,7 @@ namespace ArchimateGeneratorExtension
             string title = "ArchimateGenerateExtension";
 
             string path_out;
-            FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path);
+            FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path, current_DTE2.Solution);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
                 path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
@@ -185,6 +184,7 @@ namespace ArchimateGeneratorExtension
 
         private void Generate3(object sender, EventArgs e)
         {
+            EnvDTE80.DTE2 current_DTE2 = GetDTE2();
             string path_in = GetSourceFilePath();
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
@@ -205,7 +205,7 @@ namespace ArchimateGeneratorExtension
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
 
             string path_out;
-            FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path);
+            FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path, current_DTE2.Solution);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
             if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
                 path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";

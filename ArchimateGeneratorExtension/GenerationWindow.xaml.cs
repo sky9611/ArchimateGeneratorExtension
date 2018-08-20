@@ -36,6 +36,7 @@ namespace ArchimateGeneratorExtension
         List<string> list_type = new List<string>();
         List<string> list_group = new List<string>();
         List<string> list_view = new List<string>();
+        List<string> list_project = new List<string>();
         private bool handleSelection = true;
         private bool select_all = false;
         string input_path;
@@ -64,7 +65,7 @@ namespace ArchimateGeneratorExtension
             using (new WaitCursor())
             {
                 // very long task
-                fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path);
+                fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path, solution);
             }
             
             this.projects = projects;
@@ -201,12 +202,18 @@ namespace ArchimateGeneratorExtension
             {
                 // very long task
                 fileGenerator.Generate(output_path, types, groups, views, elements, NameSpace.Text, solution);
+
+                if (list_type.Count() == 1 && list_type.ElementAt(0).Equals(Tools.ElementConstants.ApplicationComponent))
+                    Generate_Projects(list_element);
+
             }
-            
+
             //}
 
-            FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["errors"]), "Errors");
-            FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["warnings"]), "Warnings");
+            if (fileGenerator.Log["errors"].Count()>0)
+                FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["errors"]), "Errors");
+            if (fileGenerator.Log["warnings"].Count() > 0)
+                FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["warnings"]), "Warnings");
             Close();
             
         }
@@ -290,6 +297,15 @@ namespace ArchimateGeneratorExtension
             }
         }
 
+        private void RemoveSelection(ItemSelectionChangedEventArgs e, MyCheckComboBox box)
+        {
+            if (box.SelectedItems.Count>0 && box.SelectedItems.Count == box.Items.Count)
+                box.SelectedItems.RemoveAt(0);
+            else
+                for (int i = box.SelectedItems.Count - 1; i >= 0; i--)
+                    box.SelectedItems.RemoveAt(i);
+        }
+
         private void ElementType_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
         {
             if(handleSelection)
@@ -305,6 +321,10 @@ namespace ArchimateGeneratorExtension
                 if (!i.ToString().Equals("Select All"))
                     list_type.Add(i.ToString());
             }
+
+            RemoveSelection(e, Group);
+            RemoveSelection(e, View);
+            RemoveSelection(e, Element);
 
             if (select_all)
             {
@@ -323,7 +343,7 @@ namespace ArchimateGeneratorExtension
 
         private void UpdateElements()
         {
-            _elements = fileGenerator.getElements(list_type.ToArray(), list_group.ToArray(), list_view.ToArray());
+            _elements = fileGenerator.getElements(list_type.ToArray(), list_group.ToArray(), list_view.ToArray(), list_project.ToArray());
             List<string> list = _elements.ToList();
             list.Sort();
             _elements = list.ToArray();
@@ -370,6 +390,8 @@ namespace ArchimateGeneratorExtension
             }
             handleSelection = true;
 
+            RemoveSelection(e, Element);
+
             list_group.Clear();
             foreach (var i in Group.SelectedItems)
             {
@@ -396,6 +418,8 @@ namespace ArchimateGeneratorExtension
                 ItemSelectionChanged(e, View);
             }
             handleSelection = true;
+            
+            RemoveSelection(e, Element);
 
             list_view.Clear();
             foreach (var i in View.SelectedItems)
@@ -519,19 +543,25 @@ namespace ArchimateGeneratorExtension
                 ItemSelectionChanged(e, Project);
             }
             handleSelection = true;
-        }
+            
+            RemoveSelection(e, Element);
 
-        private void Generate_Projects_Click(object sender, RoutedEventArgs e)
-        {
-            List<string> list_project = new List<string>();
+            list_project.Clear();
             foreach (var i in Project.SelectedItems)
             {
                 if (!i.ToString().Equals("Select All"))
                     list_project.Add(i.ToString());
             }
+
+            UpdateElements();
+        }
+
+        private void Generate_Projects(List<string> list_element)
+        {
+
             using (new WaitCursor())
             {
-                foreach (var i in list_project)
+                foreach (var i in list_element)
                     fileGenerator.GenerateProject(solution, i);
             }
             fileGenerator.AddProjectReferences(solution);

@@ -55,7 +55,7 @@ namespace ArchimateGeneratorExtension
             {
                 if (XMLPath.Text.Length > 0)
                 {
-                    fileGenerator = new FileGenerator(@XMLPath.Text, new Dictionary<string, string>(), "", "");
+                    fileGenerator = new FileGenerator(@XMLPath.Text, new Dictionary<string, string>(), "", "", null);
 
                     solutions = fileGenerator.getAllSolutions();
 
@@ -73,6 +73,7 @@ namespace ArchimateGeneratorExtension
             System.Windows.Forms.OpenFileDialog browse = new System.Windows.Forms.OpenFileDialog();
             browse.ShowDialog();
             XMLPath.Text = browse.FileName;
+            XMLPath.Focus();
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -80,6 +81,7 @@ namespace ArchimateGeneratorExtension
             System.Windows.Forms.FolderBrowserDialog browse = new System.Windows.Forms.FolderBrowserDialog();
             browse.ShowDialog();
             SolutionPath.Text = browse.SelectedPath;
+            XMLPath.Focus();
         }
     }
 }
