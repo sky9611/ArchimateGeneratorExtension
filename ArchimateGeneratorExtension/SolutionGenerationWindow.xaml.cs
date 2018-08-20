@@ -27,11 +27,6 @@ namespace ArchimateGeneratorExtension
 
         }
 
-        private void SolutionSearch_KeyUp(object sender, KeyEventArgs e)
-        {
-
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             List<string> list_selected_solution = new List<string>();
@@ -64,7 +59,15 @@ namespace ArchimateGeneratorExtension
                     foreach (var i in solutions)
                         SolutionName.Items.Add(i);
                 }
-                    
+
+                if (SolutionName.Items.Count == 0)
+                {
+
+                    Solution_TextBlock.Visibility = Visibility.Hidden;
+                    SolutionName.Visibility = Visibility.Hidden;
+                }
+
+
             }
         }
 
