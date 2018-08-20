@@ -24,7 +24,10 @@ namespace ArchimateGeneratorExtension
 
         private void SolutionName_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
         {
-
+            if (SolutionName.SelectedItems.Count > 0)
+                Generate.IsEnabled = true;
+            else
+                Generate.IsEnabled = false;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

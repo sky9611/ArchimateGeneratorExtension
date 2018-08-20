@@ -14,12 +14,11 @@
         <TextBox x:Name="XMLPath" HorizontalAlignment="Left" Height="42" Margin="204.571,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="383" FontSize="22" Grid.Column="1" LostFocus="XMLPath_LostFocus"/>
         <TextBlock x:Name="Element_type_Copy" HorizontalAlignment="Left" Margin="1.571,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="42" Width="174" FontSize="22" Grid.Column="1"><Run Text="Solution"/><Run Text=" path"/></TextBlock>
         <TextBox x:Name="SolutionPath" HorizontalAlignment="Left" Height="42" Margin="204.571,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="383" FontSize="22" Grid.Column="1"/>
-        <TextBlock x:Name="Element_type_Copy1" HorizontalAlignment="Left" Margin="1.571,208,0,0" TextWrapping="Wrap" Text="Solution Name" VerticalAlignment="Top" Height="42" Width="174" FontSize="22" Grid.Column="1"/>
+        <TextBlock x:Name="Solution_TextBlock" HorizontalAlignment="Left" Margin="1.571,208,0,0" TextWrapping="Wrap" Text="Solution Name" VerticalAlignment="Top" Height="42" Width="174" FontSize="22" Grid.Column="1"/>
         <local:MyCheckComboBox x:Name="SolutionName" 
             ItemsSource="{Binding}"
-            SelectedValue="{Binding SelectedValue}" Height="45" Margin="205,236,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="383" ItemSelectionChanged="SolutionName_ItemSelectionChanged" Grid.Column="1"/>
-        <TextBox x:Name="SolutionSearch" HorizontalAlignment="Left" Height="23" Margin="205,208,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="383" KeyUp="SolutionSearch_KeyUp" Grid.Column="1" />
-        <Button x:Name="Generate" Content="Generate" Grid.Column="1" HorizontalAlignment="Left" Margin="483,303,0,0" VerticalAlignment="Top" Width="105" Click="Button_Click"/>
+            SelectedValue="{Binding SelectedValue}" Height="45" Margin="205,208,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="383" ItemSelectionChanged="SolutionName_ItemSelectionChanged" Grid.Column="1"/>
+        <Button x:Name="Generate" Content="Generate" Grid.Column="1" HorizontalAlignment="Left" Margin="483,292,0,0" VerticalAlignment="Top" Width="105" Click="Button_Click" RenderTransformOrigin="0.483,-0.33" IsEnabled="False"/>
         <Button Content="..." Grid.Column="1" HorizontalAlignment="Left" Margin="593,46,0,0" VerticalAlignment="Top" Width="41" Height="42" Click="Button_Click_1" FontSize="18"/>
         <Button Content="..." Grid.Column="1" HorizontalAlignment="Left" Margin="593,129,0,0" VerticalAlignment="Top" Width="41" Height="42" Click="Button_Click_2" FontSize="18"/>
     </Grid>
