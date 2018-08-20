@@ -59,6 +59,7 @@ namespace ArchimateGeneratorExtension
 
                     int n = solutions.Length;
 
+                    SolutionName.Items.Clear();
                     foreach (var i in solutions)
                         SolutionName.Items.Add(i);
                 }
