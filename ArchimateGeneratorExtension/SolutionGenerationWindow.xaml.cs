@@ -1,4 +1,5 @@
 ﻿using FichierGenerator;
+using JR.Utils.GUI.Forms;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -44,6 +45,9 @@ namespace ArchimateGeneratorExtension
                 // Copy the XML to the solution folder
                 File.Copy(@XMLPath.Text, Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
             }
+
+            FlexibleMessageBox.Show("Solution generated successfully", "Message");
+            Close();
         }
 
         private void XMLPath_LostFocus(object sender, RoutedEventArgs e)
@@ -62,16 +66,13 @@ namespace ArchimateGeneratorExtension
                     SolutionName.Items.Clear();
                     foreach (var i in solutions)
                         SolutionName.Items.Add(i);
+
+                    if (SolutionName.Items.Count == 0)
+                    {
+                        Solution_TextBlock.Visibility = Visibility.Hidden;
+                        SolutionName.Visibility = Visibility.Hidden;
+                    }
                 }
-
-                if (SolutionName.Items.Count == 0)
-                {
-
-                    Solution_TextBlock.Visibility = Visibility.Hidden;
-                    SolutionName.Visibility = Visibility.Hidden;
-                }
-
-
             }
         }
 
