@@ -33,6 +33,7 @@ namespace ArchimateGeneratorExtension
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            EnvDTE.Solution solution;
             List<string> list_selected_solution = new List<string>();
             foreach (var i in SolutionName.SelectedItems)
             {
@@ -44,6 +45,10 @@ namespace ArchimateGeneratorExtension
 
                 // Copy the XML to the solution folder
                 File.Copy(@XMLPath.Text, Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
+                // Add to project
+                // Unexpectiong error: Error HRESULT E_FAIL has been returned from a call to a COM component
+                //EnvDTE.Project project = fileGenerator.GetProjectByName(solution, StringHelper.UpperString(i.ToString()));
+                //project.ProjectItems.AddFromFile(Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
             }
 
             FlexibleMessageBox.Show("Solution generated successfully", "Message");
