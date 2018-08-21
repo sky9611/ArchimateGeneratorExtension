@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchimateGeneratorExtension
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FichierGenerator", "..\FichierGenerator\FichierGenerator\FichierGenerator.csproj", "{74D18F81-39B2-41F9-821A-F8B8C112DDDA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools", "..\Tools\ArchiTools\StringHelper\Tools.csproj", "{66663383-A411-49DD-BADE-863939D4FA6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{74D18F81-39B2-41F9-821A-F8B8C112DDDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74D18F81-39B2-41F9-821A-F8B8C112DDDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74D18F81-39B2-41F9-821A-F8B8C112DDDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66663383-A411-49DD-BADE-863939D4FA6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66663383-A411-49DD-BADE-863939D4FA6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66663383-A411-49DD-BADE-863939D4FA6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66663383-A411-49DD-BADE-863939D4FA6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

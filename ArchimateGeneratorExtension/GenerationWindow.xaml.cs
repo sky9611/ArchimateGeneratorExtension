@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Xceed.Wpf.Toolkit;
 using Xceed.Wpf.Toolkit.Primitives;
+using Tools;
 
 namespace ArchimateGeneratorExtension
 {

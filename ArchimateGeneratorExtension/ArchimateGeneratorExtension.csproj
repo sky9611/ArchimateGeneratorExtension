@@ -181,10 +181,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Tools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\FichierGenerator\FichierGenerator\lib\Tools.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -223,6 +219,10 @@
     <ProjectReference Include="..\..\FichierGenerator\FichierGenerator\FichierGenerator.csproj">
       <Project>{74d18f81-39b2-41f9-821a-f8b8c112ddda}</Project>
       <Name>FichierGenerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\ArchiTools\StringHelper\Tools.csproj">
+      <Project>{66663383-a411-49dd-bade-863939d4fa6d}</Project>
+      <Name>Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
