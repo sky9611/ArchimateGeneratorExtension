@@ -139,7 +139,7 @@ namespace ArchimateGeneratorExtension
             else
                 path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
 
-            fileGenerator.Generate(path_out, fileGenerator.getAllType(), fileGenerator.getAllGroup(), fileGenerator.getAllView(), fileGenerator.getAllElements(), "Maidis.Vnext.", current_DTE2.Solution);
+            fileGenerator.Generate(path_out, fileGenerator.getAllElements(), "Maidis.Vnext.", current_DTE2.Solution);
 
             // show a message box to prove we were here
             VsShellUtilities.ShowMessageBox(
@@ -236,7 +236,7 @@ namespace ArchimateGeneratorExtension
 
             //if (str_projects_paths.Length==0)
             //{
-            fileGenerator.Generate(path_out, element_types, groups, views, elements, name_space, GetDTE().Solution);
+            fileGenerator.Generate(path_out, elements, name_space, GetDTE().Solution);
             //}
             //else
             //{
