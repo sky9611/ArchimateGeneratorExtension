@@ -33,25 +33,29 @@ namespace ArchimateGeneratorExtension
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            EnvDTE.Solution solution;
+            EnvDTE.DTE dte = null;
             List<string> list_selected_solution = new List<string>();
             foreach (var i in SolutionName.SelectedItems)
             {
                 // Display wait cursor
                 using (new WaitCursor())
                 {
-                    fileGenerator.GenerateSolution(@SolutionPath.Text, i.ToString());
+                    dte = fileGenerator.GenerateSolution(@SolutionPath.Text, i.ToString());
                 }
-
+                string file_path = Path.GetFullPath(Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
                 // Copy the XML to the solution folder
-                File.Copy(@XMLPath.Text, Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
+                File.Copy(@XMLPath.Text, file_path);
                 // Add to project
+                System.Threading.Thread.Sleep(1000);
                 // Unexpectiong error: Error HRESULT E_FAIL has been returned from a call to a COM component
-                //EnvDTE.Project project = fileGenerator.GetProjectByName(solution, StringHelper.UpperString(i.ToString()));
-                //project.ProjectItems.AddFromFile(Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
+                EnvDTE.Project project = fileGenerator.GetProjectByName(dte.Solution, StringHelper.UpperString(i.ToString()));
+                project.ProjectItems.AddFromFile(file_path);
+                //project.ProjectItems.AddFromFile(@"D:\documents\INSA\maidis\vs\Projet\FichierGenerator\FichierGenerator\lib\MODELE_VNEXT.xml");
+                
             }
-
+            dte.Quit();
             FlexibleMessageBox.Show("Solution generated successfully", "Message");
+            
             Close();
         }
 
