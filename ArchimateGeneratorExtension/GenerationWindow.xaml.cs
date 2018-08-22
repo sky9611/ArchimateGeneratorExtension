@@ -47,6 +47,7 @@ namespace ArchimateGeneratorExtension
         string[] _views;
         string[] _types;
         string[] _elements;
+        string[] element_id;
         string[] _projects;
         FileGenerator fileGenerator;
         IEnumerable<Project> projects;
@@ -304,7 +305,11 @@ namespace ArchimateGeneratorExtension
                 box.SelectedItems.RemoveAt(0);
             else
                 for (int i = box.SelectedItems.Count - 1; i >= 0; i--)
+                {
+                    while (i > box.SelectedItems.Count - 1 && i > 0)
+                        i--;
                     box.SelectedItems.RemoveAt(i);
+                }
         }
 
         private void ElementType_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
@@ -316,54 +321,75 @@ namespace ArchimateGeneratorExtension
             }
             handleSelection = true;
 
-            list_type.Clear();
-            foreach (var i in ElementType.SelectedItems)
+            if (!select_all)
             {
-                if (!i.ToString().Equals("Select All"))
-                    list_type.Add(i.ToString());
-            }
-
-            RemoveSelection(e, Group);
-            RemoveSelection(e, View);
-            RemoveSelection(e, Element);
-
-            if (select_all)
-            {
-                _elements = fileGenerator.getAllElements();
-                Element.Items.Clear();
-                foreach (var i in _elements)
+                list_type.Clear();
+                foreach (var i in ElementType.SelectedItems)
                 {
-                    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
-                    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
-                    string type = dict[key].Type_;
-                    dict.Remove(key);
-                    Element.Items.Add(i + "(" + type + ")");
+                    if (!i.ToString().Equals("Select All"))
+                        list_type.Add(i.ToString());
                 }
-            }
-            else
-            {
-                UpdateGroups();
-                UpdateViews();
-                UpdateElements();
+
+                RemoveSelection(e, Group);
+                RemoveSelection(e, View);
+                RemoveSelection(e, Element);
+
+                if (select_all)
+                {
+                    _elements = fileGenerator.getAllElements();
+                    element_id = fileGenerator.getAllElementID();
+                    Element.Items.Clear();
+                    Element.Items.Add("Select All");
+                    //foreach (var i in _elements)
+                    //{
+                    //    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
+                    //    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
+                    //    string type = dict[key].Type_;
+                    //    dict.Remove(key);
+                    //    Element.Items.Add(i + "(" + type + ")");
+                    //}
+                    List<string> list = new List<string>();
+                    foreach (var i in element_id)
+                        list.Add(fileGenerator.Dict_element[i].Name_ + "(" + fileGenerator.Dict_element[i].Type_ + ")");
+                    list.Sort();
+                    foreach (var i in list)
+                        Element.Items.Add(i);
+                }
+                else
+                {
+                    UpdateGroups();
+                    UpdateViews();
+                    UpdateElements();
+                }
             }
         }
 
         private void UpdateElements()
         {
             _elements = fileGenerator.getElements(list_type.ToArray(), list_group.ToArray(), list_view.ToArray(), list_project.ToArray());
-            List<string> list = _elements.ToList();
-            list.Sort();
-            _elements = list.ToArray();
+            element_id = fileGenerator.getElementID(list_type.ToArray(), list_group.ToArray(), list_view.ToArray(), list_project.ToArray());
+            //List<string> list = _elements.ToList();
+            //list.Sort();
+            //_elements = list.ToArray();
             Element.Items.Clear();
             Element.Items.Add("Select All");
-            foreach (var i in _elements)
-            {
-                Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
-                string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
-                string type = dict[key].Type_;
-                dict.Remove(key);
-                Element.Items.Add(i + "(" + type + ")");
-            }
+            //foreach (var i in _elements)
+            //{
+            //    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
+            //    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
+            //    string type = dict[key].Type_;
+            //    dict.Remove(key);
+            //    Element.Items.Add(i + "(" + type + ")");
+            //}
+            List<string> list = new List<string>();
+            foreach (var i in element_id)
+                if (i.Contains("id"))
+                    list.Add(fileGenerator.Dict_element[i].Name_ + "(" + fileGenerator.Dict_element[i].Type_ + ")");
+                else
+                    list.Add(i + "(" + ElementConstants.ApplicationComponent + ")");
+            list.Sort();
+            foreach (var i in list)
+                Element.Items.Add(i);
         }
 
         private string GetElementTypeByName(string name)
@@ -417,15 +443,23 @@ namespace ArchimateGeneratorExtension
                 if (select_all)
                 {
                     _elements = fileGenerator.getAllElements();
+                    element_id = fileGenerator.getAllElementID();
                     Element.Items.Clear();
-                    foreach (var i in _elements)
-                    {
-                        Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
-                        string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
-                        string type = dict[key].Type_;
-                        dict.Remove(key);
-                        Element.Items.Add(i + "(" + type + ")");
-                    }
+                    Element.Items.Add("Select All");
+                    //foreach (var i in _elements)
+                    //{
+                    //    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
+                    //    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
+                    //    string type = dict[key].Type_;
+                    //    dict.Remove(key);
+                    //    Element.Items.Add(i + "(" + type + ")");
+                    //}
+                    List<string> list = new List<string>();
+                    foreach (var i in element_id)
+                        list.Add(fileGenerator.Dict_element[i].Name_ + "(" + fileGenerator.Dict_element[i].Type_ + ")");
+                    list.Sort();
+                    foreach (var i in list)
+                        Element.Items.Add(i);
                 }
                 else
                     UpdateElements();
@@ -454,15 +488,23 @@ namespace ArchimateGeneratorExtension
                 if (select_all)
                 {
                     _elements = fileGenerator.getAllElements();
+                    element_id = fileGenerator.getAllElementID();
                     Element.Items.Clear();
-                    foreach (var i in _elements)
-                    {
-                        Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
-                        string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
-                        string type = dict[key].Type_;
-                        dict.Remove(key);
-                        Element.Items.Add(i + "(" + type + ")");
-                    }
+                    Element.Items.Add("Select All");
+                    //foreach (var i in _elements)
+                    //{
+                    //    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
+                    //    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
+                    //    string type = dict[key].Type_;
+                    //    dict.Remove(key);
+                    //    Element.Items.Add(i + "(" + type + ")");
+                    //}
+                    List<string> list = new List<string>();
+                    foreach (var i in element_id)
+                        list.Add(fileGenerator.Dict_element[i].Name_ + "(" + fileGenerator.Dict_element[i].Type_ + ")");
+                    list.Sort();
+                    foreach (var i in list)
+                        Element.Items.Add(i);
                 }
                 else
                     UpdateElements();
@@ -480,7 +522,13 @@ namespace ArchimateGeneratorExtension
                 mylist = elements.FindAll(delegate (string s) { return s.ToLower().Contains(ElementSearch.Text.Trim().ToLower()); });
                 mylist.Sort();
                 foreach (var i in mylist)
-                    Element.Items.Add(i);
+                {
+                    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
+                    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
+                    string type = dict[key].Type_;
+                    dict.Remove(key);
+                    Element.Items.Add(i + "(" + type + ")");
+                }
                 //View.ItemsSource = mylist.ToArray();
                 Element.IsDropDownOpen = true;
             }
@@ -489,7 +537,13 @@ namespace ArchimateGeneratorExtension
                 //View.ItemsSource = fileGenerator.getAllGroup();
                 Element.Items.Add("Select All");
                 foreach (var i in _elements)
-                    Element.Items.Add(i);
+                {
+                    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
+                    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
+                    string type = dict[key].Type_;
+                    dict.Remove(key);
+                    Element.Items.Add(i + "(" + type + ")");
+                }
             }
         }
 
