@@ -17,12 +17,21 @@ namespace ArchimateGeneratorExtension
         FileGenerator fileGenerator;
         string[] solutions;
 
+        /// <summary>
+        ///     Initialise the wpf
+        /// </summary>
+        /// <param name="path_out"></param>
         public SolutionGenerationWindow(string path_out)
         {
             InitializeComponent();
             SolutionPath.Text = path_out;
         }
 
+        /// <summary>
+        ///     Enable/Disable the button "Generate" when selected item changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SolutionName_ItemSelectionChanged(object sender, Xceed.Wpf.Toolkit.Primitives.ItemSelectionChangedEventArgs e)
         {
             if (SolutionName.SelectedItems.Count > 0)
@@ -31,6 +40,11 @@ namespace ArchimateGeneratorExtension
                 Generate.IsEnabled = false;
         }
 
+        /// <summary>
+        ///     Click to generate the solution
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             EnvDTE.DTE dte = null;
@@ -47,11 +61,8 @@ namespace ArchimateGeneratorExtension
                 File.Copy(@XMLPath.Text, file_path);
                 // Add to project
                 System.Threading.Thread.Sleep(1000);
-                // Unexpectiong error: Error HRESULT E_FAIL has been returned from a call to a COM component
                 EnvDTE.Project project = fileGenerator.GetProjectByName(dte.Solution, StringHelper.UpperString(i.ToString()));
                 project.ProjectItems.AddFromFile(file_path);
-                //project.ProjectItems.AddFromFile(@"D:\documents\INSA\maidis\vs\Projet\FichierGenerator\FichierGenerator\lib\MODELE_VNEXT.xml");
-                
             }
             dte.Quit();
             FlexibleMessageBox.Show("Solution generated successfully", "Message");
@@ -85,6 +96,11 @@ namespace ArchimateGeneratorExtension
             }
         }
 
+        /// <summary>
+        ///     Open the XML file choose dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog browse = new System.Windows.Forms.OpenFileDialog();
@@ -93,6 +109,11 @@ namespace ArchimateGeneratorExtension
             XMLPath.Focus();
         }
 
+        /// <summary>
+        ///     Open the solution saving directory choose dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog browse = new System.Windows.Forms.FolderBrowserDialog();
