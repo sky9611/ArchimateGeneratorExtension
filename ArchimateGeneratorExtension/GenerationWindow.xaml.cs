@@ -73,6 +73,8 @@ namespace ArchimateGeneratorExtension
             this.projects = projects;
             InitializeComponent();
 
+            Generate.IsEnabled = false;
+
             NameSpace.Text = name_space;
 
             //List<string> types = fileGenerator.getAllType().ToList();
@@ -96,17 +98,27 @@ namespace ArchimateGeneratorExtension
             foreach (var i in _types)
                 ElementType.Items.Add(i);
 
-            Group.Items.Add("Select All");
-            foreach (var i in _groups)
-                Group.Items.Add(i);
+            if (_groups.Count() > 0)
+            {
+                Group.Items.Add("Select All");
+                foreach (var i in _groups)
+                    Group.Items.Add(i);
+            }
 
-            View.Items.Add("Select All");
-            foreach (var i in _views)
-                View.Items.Add(i);
+            if (_views.Count()>0)
+            {
+                View.Items.Add("Select All");
+                foreach (var i in _views)
+                    View.Items.Add(i);
+            }
 
-            Project.Items.Add("Select All");
-            foreach (var i in _projects)
-                Project.Items.Add(i);
+
+            if (_projects.Count() > 0)
+            {
+                Project.Items.Add("Select All");
+                foreach (var i in _projects)
+                    Project.Items.Add(i);
+            }
 
 
         }
@@ -366,30 +378,41 @@ namespace ArchimateGeneratorExtension
 
         private void UpdateElements()
         {
+            if (list_type.Count == 0)
+                list_type = fileGenerator.getAllType().ToList();
+            if (list_group.Count == 0 && Group.Items.Count>0)
+                list_group = fileGenerator.getAllGroup().ToList();
+            if (list_view.Count == 0 && View.Items.Count > 0)
+                list_view = fileGenerator.getAllView().ToList();
+            if (list_project.Count == 0 && Project.Items.Count > 0)
+                list_project = fileGenerator.GetProjects(solution).ToList();
             _elements = fileGenerator.getElements(list_type.ToArray(), list_group.ToArray(), list_view.ToArray(), list_project.ToArray());
             element_id = fileGenerator.getElementID(list_type.ToArray(), list_group.ToArray(), list_view.ToArray(), list_project.ToArray());
             //List<string> list = _elements.ToList();
             //list.Sort();
             //_elements = list.ToArray();
             Element.Items.Clear();
-            Element.Items.Add("Select All");
-            //foreach (var i in _elements)
-            //{
-            //    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
-            //    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
-            //    string type = dict[key].Type_;
-            //    dict.Remove(key);
-            //    Element.Items.Add(i + "(" + type + ")");
-            //}
-            List<string> list = new List<string>();
-            foreach (var i in element_id)
-                if (i.Contains("id"))
-                    list.Add(fileGenerator.Dict_element[i].Name_ + "(" + fileGenerator.Dict_element[i].Type_ + ")");
-                else
-                    list.Add(i + "(" + ElementConstants.ApplicationComponent + ")");
-            list.Sort();
-            foreach (var i in list)
-                Element.Items.Add(i);
+            if (element_id.Count()>0)
+            {
+                Element.Items.Add("Select All");
+                //foreach (var i in _elements)
+                //{
+                //    Dictionary<string, Element> dict = new Dictionary<string, Element>(fileGenerator.Dict_element);
+                //    string key = dict.First(x => x.Value.Name_.Equals(i)).Key;
+                //    string type = dict[key].Type_;
+                //    dict.Remove(key);
+                //    Element.Items.Add(i + "(" + type + ")");
+                //}
+                List<string> list = new List<string>();
+                foreach (var i in element_id)
+                    if (i.Contains("id"))
+                        list.Add(fileGenerator.Dict_element[i].Name_ + "(" + fileGenerator.Dict_element[i].Type_ + ")");
+                    else
+                        list.Add(i + "(" + ElementConstants.ApplicationComponent + ")");
+                list.Sort();
+                foreach (var i in list)
+                    Element.Items.Add(i);
+            }                
         }
 
         private string GetElementTypeByName(string name)
@@ -404,9 +427,12 @@ namespace ArchimateGeneratorExtension
             list.Sort();
             _groups = list.ToArray();
             Group.Items.Clear();
-            Group.Items.Add("Select All");
-            foreach (var i in _groups)
-                Group.Items.Add(i);
+            if (_groups.Count() > 0)
+            {
+                Group.Items.Add("Select All");
+                foreach (var i in _groups)
+                    Group.Items.Add(i);
+            }
         }
         private void UpdateViews()
         {
@@ -415,9 +441,12 @@ namespace ArchimateGeneratorExtension
             list.Sort();
             _views = list.ToArray();
             View.Items.Clear();
-            View.Items.Add("Select All");
-            foreach (var i in _views)
-                View.Items.Add(i);
+            if (_views.Count()>0)
+            {
+                View.Items.Add("Select All");
+                foreach (var i in _views)
+                    View.Items.Add(i);
+            }
         }
 
         private void Group_ItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
@@ -555,6 +584,12 @@ namespace ArchimateGeneratorExtension
                 ItemSelectionChanged(e, Element);
             }
             handleSelection = true;
+
+            if (Element.SelectedItems.Count > 0)
+                Generate.IsEnabled = true;
+            else
+                Generate.IsEnabled = false;
+
         }
 
         public static void IncludeNewFiles(Project project)
