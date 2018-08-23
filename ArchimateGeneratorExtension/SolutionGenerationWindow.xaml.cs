@@ -56,7 +56,9 @@ namespace ArchimateGeneratorExtension
                 {
                     dte = fileGenerator.GenerateSolution(@SolutionPath.Text, i.ToString());
                 }
-                string file_path = Path.GetFullPath(Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), Path.GetFileName(@XMLPath.Text)));
+                string folder_path = Path.GetFullPath(Path.Combine(Path.Combine(Path.Combine(@SolutionPath.Text, StringHelper.UpperString(i.ToString())), StringHelper.UpperString(i.ToString())), "Model"));
+                Directory.CreateDirectory(folder_path);
+                string file_path = Path.GetFullPath(Path.Combine(folder_path, Path.GetFileName(@XMLPath.Text)));
                 // Copy the XML to the solution folder
                 File.Copy(@XMLPath.Text, file_path);
                 // Add to project

@@ -228,6 +228,8 @@ namespace ArchimateGeneratorExtension
                 FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["errors"]), "Errors");
             if (fileGenerator.Log["warnings"].Count() > 0)
                 FlexibleMessageBox.Show(string.Join("\n", fileGenerator.Log["warnings"]), "Warnings");
+
+            FlexibleMessageBox.Show("The elements has been generated successfully", "Message");
             Close();
             
         }
@@ -380,12 +382,30 @@ namespace ArchimateGeneratorExtension
         {
             if (list_type.Count == 0)
                 list_type = fileGenerator.getAllType().ToList();
-            if (list_group.Count == 0 && Group.Items.Count>0)
-                list_group = fileGenerator.getAllGroup().ToList();
-            if (list_view.Count == 0 && View.Items.Count > 0)
-                list_view = fileGenerator.getAllView().ToList();
-            if (list_project.Count == 0 && Project.Items.Count > 0)
-                list_project = fileGenerator.GetProjects(solution).ToList();
+            if (list_group.Count == 0)
+            {
+                if (Group.Items.Count > 0 && list_project.Count == 0)
+                {
+                    list_group = fileGenerator.getAllGroup().ToList();
+                }
+                else
+                    list_view.Clear();
+            }
+            if (list_view.Count == 0)
+            {
+                if (View.Items.Count > 0 && list_project.Count == 0)
+                    list_view = fileGenerator.getAllView().ToList();
+                else
+                    list_view.Clear();
+            }
+            if (list_project.Count == 0)
+            {
+                if (Project.Items.Count > 0 && list_view.Count == 0 && list_group.Count == 0)
+                    list_project = fileGenerator.GetProjects(solution).ToList();
+                else
+                    list_project.Clear();
+            }
+            
             _elements = fileGenerator.getElements(list_type.ToArray(), list_group.ToArray(), list_view.ToArray(), list_project.ToArray());
             element_id = fileGenerator.getElementID(list_type.ToArray(), list_group.ToArray(), list_view.ToArray(), list_project.ToArray());
             //List<string> list = _elements.ToList();
@@ -405,7 +425,7 @@ namespace ArchimateGeneratorExtension
                 //}
                 List<string> list = new List<string>();
                 foreach (var i in element_id)
-                    if (i.Contains("id"))
+                    if (fileGenerator.Dict_element.ContainsKey(i))
                         list.Add(fileGenerator.Dict_element[i].Name_ + "(" + fileGenerator.Dict_element[i].Type_ + ")");
                     else
                         list.Add(i + "(" + ElementConstants.ApplicationComponent + ")");
