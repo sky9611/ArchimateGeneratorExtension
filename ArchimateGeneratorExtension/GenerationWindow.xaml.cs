@@ -209,7 +209,7 @@ namespace ArchimateGeneratorExtension
             using (new WaitCursor())
             {
                 // very long task
-                fileGenerator.Generate(elements, NameSpace.Text, solution);
+                fileGenerator.Generate(types, elements, NameSpace.Text, solution);
 
                 if (list_type.Count() == 1 && list_type.ElementAt(0).Equals(Tools.ElementConstants.ApplicationComponent))
                     Generate_Projects(list_element);

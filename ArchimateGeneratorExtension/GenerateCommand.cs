@@ -137,7 +137,7 @@ namespace ArchimateGeneratorExtension
             FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path, current_DTE2.Solution);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
 
-            fileGenerator.Generate(fileGenerator.getAllElements(), "Maidis.Vnext.", current_DTE2.Solution);
+            fileGenerator.Generate(fileGenerator.getAllType(), fileGenerator.getAllElements(), "Maidis.Vnext.", current_DTE2.Solution);
 
             // show a message box to prove we were here
             VsShellUtilities.ShowMessageBox(
@@ -221,7 +221,7 @@ namespace ArchimateGeneratorExtension
                     dict_path_project.Add(project_path, p);
                 }
 
-                fileGenerator.Generate(elements, name_space, GetDTE().Solution);
+                fileGenerator.Generate(fileGenerator.getAllType(), elements, name_space, GetDTE().Solution);
 
                 message = "File generated with the former setting";
             }                
@@ -232,10 +232,11 @@ namespace ArchimateGeneratorExtension
                     path_in = path_in.Replace(".generated", "");
                     string source_file = UserSettings.Default.SourceFile;
                     FileGenerator fileGenerator = new FileGenerator(source_file, dict_implementation, current_solution_name, current_solution_path, current_DTE2.Solution);
-                    string element_name = fileGenerator.Dict_element.FirstOrDefault(x => StringHelper.UpperString(x.Value.Class_name_).Equals(Path.GetFileNameWithoutExtension(path_in))).Value.Name_;
+                    Element element = fileGenerator.Dict_element.FirstOrDefault(x => StringHelper.UpperString(x.Value.Class_name_).Equals(Path.GetFileNameWithoutExtension(path_in))).Value;
+                    string element_name = element.Name_;
                     if (element_name!=null)
                     {
-                        fileGenerator.Generate(new[] { element_name }, UserSettings.Default.Name_space, GetDTE().Solution);
+                        fileGenerator.Generate(new[] { element.Type_ }, new[] { element_name }, UserSettings.Default.Name_space, GetDTE().Solution);
                         message = "Element \"" + element_name + "\" regenerated successfully";
                     }
                     else
