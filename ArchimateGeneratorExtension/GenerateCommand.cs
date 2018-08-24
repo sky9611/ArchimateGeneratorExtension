@@ -8,6 +8,7 @@ using FichierGenerator;
 using System.Linq;
 using System.Collections.Generic;
 using Tools;
+using System.IO;
 
 namespace ArchimateGeneratorExtension
 {
@@ -122,6 +123,8 @@ namespace ArchimateGeneratorExtension
             current_solution_path = System.IO.Path.GetDirectoryName(current_DTE2.Solution.FullName);
             current_solution_name = current_DTE2.Solution.FileName;
             string path_in = GetSourceFilePath();
+            UserSettings.Default.SourceFile = path_in;
+            UserSettings.Default.Save();
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
             string message;
@@ -131,15 +134,10 @@ namespace ArchimateGeneratorExtension
                 message = "error: File type not correct";
             string title = "ArchimateGenerateExtension";
 
-            string path_out;
             FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path, current_DTE2.Solution);
             GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
-            if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
-                path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
-            else
-                path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
 
-            fileGenerator.Generate(path_out, fileGenerator.getAllElements(), "Maidis.Vnext.", current_DTE2.Solution);
+            fileGenerator.Generate(fileGenerator.getAllElements(), "Maidis.Vnext.", current_DTE2.Solution);
 
             // show a message box to prove we were here
             VsShellUtilities.ShowMessageBox(
@@ -158,6 +156,8 @@ namespace ArchimateGeneratorExtension
             current_solution_name = current_DTE2.Solution.FileName;
             ThreadHelper.ThrowIfNotOnUIThread();
             string path_in = GetSourceFilePath();
+            UserSettings.Default.SourceFile = path_in;
+            UserSettings.Default.Save();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
             string message;
             if (isCorrectFileType(path_in))
@@ -189,10 +189,69 @@ namespace ArchimateGeneratorExtension
             ThreadHelper.ThrowIfNotOnUIThread();
             //string message = string.Format(CultureInfo.CurrentCulture, "inside {0}.menuitemcallback()", GetType().FullName);
             string message;
-            if (isCorrectFileType(path_in))
+            if (Path.GetExtension(path_in).Equals(".xml"))
+            {
+                string path_out;
+                FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path, current_DTE2.Solution);
+                GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
+                if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
+                    path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
+                else
+                    path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
+
+                string str_types = UserSettings.Default.ElementType;
+                string str_groups = UserSettings.Default.Groups;
+                string str_views = UserSettings.Default.Views;
+                string str_elements = UserSettings.Default.Elements;
+                //string str_projects_paths = UserSettings.Default.Projects_paths;
+                string name_space = UserSettings.Default.Name_space;
+
+                string[] element_types = str_types.Length > 0 ? str_types.Split(',').ToList().ToArray() : null;
+                string[] groups = str_groups.Length > 0 ? str_groups.Split(',').ToList().ToArray() : null;
+                string[] views = str_views.Length > 0 ? str_views.Split(',').ToList().ToArray() : null;
+                string[] elements = str_elements.Length > 0 ? str_elements.Split(',').ToList().ToArray() : null;
+                //string[] projects_paths = str_projects_paths.Length > 0 ? str_projects_paths.Split(',').ToList().ToArray() : null;
+
+                var projects = GetProjects();
+                Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
+                foreach (var p in projects)
+                {
+                    var fullName = p.FullName;
+                    var project_path = fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), "");
+                    dict_path_project.Add(project_path, p);
+                }
+
+                fileGenerator.Generate(elements, name_space, GetDTE().Solution);
+
                 message = "File generated with the former setting";
+            }                
+            else if (Path.GetExtension(path_in).Equals(".cs"))
+            {
+                if (UserSettings.Default.SourceFile.Length > 0)
+                {
+                    path_in = path_in.Replace(".generated", "");
+                    string source_file = UserSettings.Default.SourceFile;
+                    FileGenerator fileGenerator = new FileGenerator(source_file, dict_implementation, current_solution_name, current_solution_path, current_DTE2.Solution);
+                    string element_name = fileGenerator.Dict_element.FirstOrDefault(x => StringHelper.UpperString(x.Value.Class_name_).Equals(Path.GetFileNameWithoutExtension(path_in))).Value.Name_;
+                    if (element_name!=null)
+                    {
+                        fileGenerator.Generate(new[] { element_name }, UserSettings.Default.Name_space, GetDTE().Solution);
+                        message = "Element \"" + element_name + "\" regenerated successfully";
+                    }
+                    else
+                    {
+                        message = "Element \"" + element_name + "\" doesn't exist in model";
+                    }
+                        
+                }
+                else
+                    message = "You have never generated before";
+
+            }
             else
+            {
                 message = "error: File type not correct";
+            }
             string title = "ArchimateGenerateExtension";
 
             // show a message box to prove we were here
@@ -204,48 +263,7 @@ namespace ArchimateGeneratorExtension
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
 
-            string path_out;
-            FileGenerator fileGenerator = new FileGenerator(path_in, dict_implementation, current_solution_name, current_solution_path, current_DTE2.Solution);
-            GenerateCommandPackage generateCommandPackage = package as GenerateCommandPackage;
-            if (generateCommandPackage.Output_path_.Equals("") || generateCommandPackage.Output_path_ == null)
-                path_out = path_in.Replace(path_in.Substring(path_in.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
-            else
-                path_out = generateCommandPackage.Output_path_ + "\\FileGenerated.cs";
-
-            string str_types = UserSettings.Default.ElementType;
-            string str_groups = UserSettings.Default.Groups;
-            string str_views = UserSettings.Default.Views;
-            string str_elements = UserSettings.Default.Elements;
-            //string str_projects_paths = UserSettings.Default.Projects_paths;
-            string name_space = UserSettings.Default.Name_space;
-
-            string[] element_types = str_types.Length>0 ? str_types.Split(',').ToList().ToArray() : null;
-            string[] groups = str_groups.Length>0 ? str_groups.Split(',').ToList().ToArray() : null;
-            string[] views = str_views.Length>0 ? str_views.Split(',').ToList().ToArray() : null;
-            string[] elements = str_elements.Length > 0 ? str_elements.Split(',').ToList().ToArray() : null;
-            //string[] projects_paths = str_projects_paths.Length > 0 ? str_projects_paths.Split(',').ToList().ToArray() : null;
-
-            var projects = GetProjects();
-            Dictionary<string, Project> dict_path_project = new Dictionary<string, Project>();
-            foreach(var p in projects)
-            {
-                var fullName = p.FullName;
-                var project_path = fullName.Replace(fullName.Substring(fullName.LastIndexOf("\\") + 1), "");
-                dict_path_project.Add(project_path, p);
-            }
-
-            //if (str_projects_paths.Length==0)
-            //{
-            fileGenerator.Generate(path_out, elements, name_space, GetDTE().Solution);
-            //}
-            //else
-            //{
-            //    foreach(var path in projects_paths)
-            //    {
-            //        fileGenerator.Generate(path + "FileGenerated.cs", element_types, groups, views, elements, name_space);
-            //        dict_path_project[path].ProjectItems.AddFromFile(path + "FileGenerated.cs");
-            //    }
-            //}
+            
         }
 
 

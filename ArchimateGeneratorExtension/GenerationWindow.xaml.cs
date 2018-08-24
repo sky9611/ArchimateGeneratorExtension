@@ -144,13 +144,7 @@ namespace ArchimateGeneratorExtension
         }
 
         private void Generate_Click(object sender, RoutedEventArgs e)
-        {
-            string path_out;
-            if (output_path == null || output_path.Equals(""))
-                path_out = input_path.Replace(input_path.Substring(input_path.LastIndexOf("\\") + 1), "") + "FileGenerated.cs";
-            else
-                path_out = output_path + "\\FileGenerated.cs";
-            
+        {           
             string[] types = list_type.ToArray();
             string str_types = String.Join(",", types.Select(i => i.ToString()).ToArray());
             
@@ -215,7 +209,7 @@ namespace ArchimateGeneratorExtension
             using (new WaitCursor())
             {
                 // very long task
-                fileGenerator.Generate(output_path, elements, NameSpace.Text, solution);
+                fileGenerator.Generate(elements, NameSpace.Text, solution);
 
                 if (list_type.Count() == 1 && list_type.ElementAt(0).Equals(Tools.ElementConstants.ApplicationComponent))
                     Generate_Projects(list_element);

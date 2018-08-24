@@ -82,5 +82,17 @@ namespace ArchimateGeneratorExtension {
                 this["Elements"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SourceFile {
+            get {
+                return ((string)(this["SourceFile"]));
+            }
+            set {
+                this["SourceFile"] = value;
+            }
+        }
     }
 }
