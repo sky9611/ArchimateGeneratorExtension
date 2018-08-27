@@ -158,7 +158,7 @@ namespace ArchimateGeneratorExtension
         private string applicationComponent_implementation_ = "Component";
         private string dataObject_implementation_ = "DAO";
         private string applicationProcess_implementation_ = "UseCaseWorkflow";
-        private string applicationService_implementation_ = "UseCaseWorkflow";
+        private string applicationService_implementation_ = "BusinessService";
 
 
         [Category("Archimate Generator Extension")]
